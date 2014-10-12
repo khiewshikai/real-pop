@@ -1,0 +1,13 @@
+/*for testing purpose*/
+.red-border {
+    border: 1px solid red;
+}
+
+.navbar-color {
+    background-color: #ef4756;
+    color: #ffffff;
+}
+
+.white {
+    color: #ffffff;
+}

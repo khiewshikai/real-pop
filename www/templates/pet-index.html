@@ -1,0 +1,30 @@
+<!-- 
+  This template gets placed in the Pet tab's <ion-nav-view> directive.
+  It was wired up in the app config (app.js) 
+  The 'pets' data comes from its $scope within PetIndexCtrl (controller.js)
+-->
+<ion-view title="POP">
+    <ion-nav-buttons side="left">
+        <button class="button-icon button-clear" ng-click=""><i class="icon white ion-clipboard"></i></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button-icon button-clear" ng-click=""><i class="icon white ion-ios7-person"></i></button>
+    </ion-nav-buttons>
+    <ion-content>
+
+        <ion-list>
+
+            <div class="row">
+                <button class="col text-center button-clear" onclick="window.location = '#/tab/pet/1'">Add Event</button>
+                <button class="col text-center button-clear">Add Friend</button>
+            </div>
+
+            <ion-item ng-repeat="pet in pets" type="item-text-wrap" href="#/tab/pet/{{pet.id}}">
+                <h3>{{pet.title}}</h3>
+                <p>{{pet.description}}</p>
+            </ion-item>
+
+        </ion-list>
+
+    </ion-content>
+</ion-view>
