@@ -1,0 +1,58 @@
+<ion-view title="POP">
+    <ion-nav-buttons side="right">
+        <button class="button-icon button-clear" onclick="window.location = '#/home'"><i class="icon white ion-checkmark"></i></button>
+    </ion-nav-buttons>
+    <ion-content padding="true">
+
+        <input type="text" pick-a-date="date" placeholder="Select Date" />
+        <input type="text" pick-a-time="time" placeholder="Select Time" />
+
+        <div class="list">
+            <label class="item item-input">
+                <input type="text" placeholder="Title">
+            </label>
+            <label class="item item-input">
+                <input type="text" placeholder="Venue">
+            </label>
+
+            <label class="item item-input">
+                <input type="date" placeholder="dd/mm/yy">
+            </label>
+            <label class="item item-input">
+                <input type="time" placeholder="00:00">
+            </label>
+        </div>
+
+        <div class="list">
+            <a class="item item-avatar" href="#">
+                <img src="venkman.jpg">
+                <h2>Brindha Menon</h2>
+            </a>
+            <a class="item item-avatar" href="#">
+                <img src="venkman.jpg">
+                <h2>Cruz Lim</h2>
+            </a>
+            <a class="item item-avatar">
+                <img src="venkman.jpg">
+                <h2>Izzuddin</h2>
+            </a>
+        </div>
+
+        <button class="button button-block button-stable" ng-click="modal.show()">
+            <i class="icon ion-plus"></i> Add Members
+        </button>
+
+        <script id="modal.html" type="text/ng-template">
+      <div class="modal">
+        <header class="bar bar-header bar-positive">
+          <h1 class="title">I'm A Modal</h1>
+          <div class="button button-clear" ng-click="modal.hide()"><span class="icon ion-close"></span></div>
+        </header>
+        <content has-header="true" padding="true">
+          <p>This is a modal</p>
+        </content>
+      </div>
+    </script>
+
+    </ion-content>
+</ion-view>
