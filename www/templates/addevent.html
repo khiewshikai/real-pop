@@ -1,32 +1,42 @@
-<ion-view title="POP">
+<ion-view title="Add Event" class="blackbg">
     <ion-nav-buttons side="right">
         <button class="button-icon button-clear" onclick="window.location = '#/home'"><i class="icon white ion-checkmark"></i></button>
     </ion-nav-buttons>
-    <ion-content padding="true">
+    <ion-content padding="true" class="whitebg">
 
-        <input type="text" pick-a-date="date" placeholder="Select Date" />
-        <input type="text" pick-a-time="time" placeholder="Select Time" />
+        <!--        <input type="text" pick-a-date="date" placeholder="Select Date" />
+                <input type="text" pick-a-time="time" placeholder="Select Time" />-->
 
         <div class="list">
+            <div class="item item-divider">
+                Details
+              </div>
             <label class="item item-input">
-                <input type="text" placeholder="Title">
+                <input name='title' type="text" placeholder="Title">
             </label>
             <label class="item item-input">
-                <input type="text" placeholder="Venue">
+                <input name='venue' type="text" placeholder="Venue">
             </label>
 
             <label class="item item-input">
-                <input type="date" placeholder="dd/mm/yy">
+                <input name='date' type="date" placeholder="dd/mm/yy">
             </label>
             <label class="item item-input">
-                <input type="time" placeholder="00:00">
+                <input name='from' type="time" placeholder="00:00">
+            </label>
+            
+            <label class="item item-input">
+                <input name='to' type="time" placeholder="00:00">
             </label>
         </div>
 
         <div class="list">
+            <div class="item item-divider">
+                Who is going?
+              </div>
             <a class="item item-avatar" href="#">
                 <img src="venkman.jpg">
-                <h2>Brindha Menon</h2>
+                <h2>You</h2>
             </a>
             <a class="item item-avatar" href="#">
                 <img src="venkman.jpg">
@@ -42,17 +52,53 @@
             <i class="icon ion-plus"></i> Add Members
         </button>
 
-        <script id="modal.html" type="text/ng-template">
-      <div class="modal">
-        <header class="bar bar-header bar-positive">
-          <h1 class="title">I'm A Modal</h1>
-          <div class="button button-clear" ng-click="modal.hide()"><span class="icon ion-close"></span></div>
-        </header>
-        <content has-header="true" padding="true">
-          <p>This is a modal</p>
-        </content>
-      </div>
-    </script>
+        <script id="add-members.html" type="text/ng-template">
+            <div class="modal">
+              <header class="bar bar-header bar-positive topRounded">
+                <h1 class="title">Add Members</h1>
+                <div class="button button-clear" ng-click="closeModal()"><span class="icon ion-close"></span></div>
+              </header>
+              <content has-header="true" padding="true">
+              <div class="addMemberList">
+                    <div class="list">
+                        <div class="item item-avatar">
+                             <img src="venkman.jpg">
+                            <span class="username">
+                                <h2>Brindha Menon</h2>
+                            </span>
+                           <div side="right"> 
+                                <label class="checkbox right-checkbox">
+                                    <input type="checkbox">
+                                  </label>
+                            </div>
+                        </div>
+                        <div class="item item-avatar">
+                            <img src="venkman.jpg">
+                            <span class="username">
+                                <h2>Cruz Lim</h2>
+                            </span>
+                           <div side="right"> 
+                                <label class="checkbox right-checkbox">
+                                    <input type="checkbox">
+                                  </label>
+                            </div>
+                        </div>
+                        <div class="item item-avatar">
+                            <img src="venkman.jpg">
+                            <span class="username">
+                                <h2>Izzuddin</h2>
+                            </span>
+                           <div side="right"> 
+                                <label class="checkbox right-checkbox">
+                                    <input type="checkbox">
+                                  </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </content>
+            </div>
+        </script>
 
     </ion-content>
 </ion-view>

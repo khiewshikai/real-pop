@@ -3,6 +3,12 @@
     border: 1px solid red;
 }
 
+.topRounded,
+.roundedBorder {
+    border-top-left-radius:8px;
+    border-top-right-radius:8px;
+}
+
 .navbar-color {
     background-color: #ef4756;
     color: #ffffff;
@@ -10,4 +16,45 @@
 
 .white {
     color: #ffffff;
+}
+
+ion-content {
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+.btnHeight {
+    height: 60px;
+}
+
+.addMemberList {
+   padding-top: 43px;
+   height: 100%;
+}
+
+.right-checkbox {
+    float:right;
+    display:inline;
+}
+
+.avatar-name {
+    display:inline;
+    float: left;
+}
+
+.username {
+    display:inline;
+    float: left;
+}
+
+.modal {
+    border-radius: 8px;
+}
+
+.blackbg {
+    background-color: #000000;
+}
+
+.whitebg {
+    background-color: #ffffff;
 }

@@ -1,17 +1,17 @@
-<ion-view title="POP">
+<ion-view title="POP" class="blackbg">
     <ion-nav-buttons side="left">
         <button class="button-icon button-clear" ng-click=""><i class="icon white ion-clipboard"></i></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
         <button class="button-icon button-clear" ng-click=""><i class="icon white ion-ios7-person"></i></button>
     </ion-nav-buttons>
-    <ion-content>
+    <ion-content class="whitebg">
 
         <ion-list>
 
-            <div class="row">
-                <button class="col text-center button-clear" onclick="window.location = '#/addevent'">Add Event</button>
-                <button class="col text-center button-clear" onclick="window.location = '#/addfriend'">Add Friend</button>
+            <div class="row btnHeight">
+                <button class="col button button-clear" onclick="window.location = '#/addevent'">Add Event</button>
+                <button class="col  button button-clear" onclick="window.location = '#/addfriend'">Add Friend</button>
             </div>
 
             <ion-item ng-repeat="pet in pets" type="item-text-wrap" href="#/tab/pet/{{pet.id}}">
