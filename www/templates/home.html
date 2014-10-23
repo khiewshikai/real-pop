@@ -14,9 +14,9 @@
                 <button class="col text-center button-clear" onclick="window.location = '#/addfriend'">Add Friend</button>
             </div>
 
-            <ion-item ng-repeat="pet in pets" type="item-text-wrap" href="#/tab/pet/{{pet.id}}">
-                <h3>{{pet.title}}</h3>
-                <p>{{pet.description}}</p>
+            <ion-item ng-repeat="event in events" type="item-text-wrap" href="#/event/{{event.id}}">
+                <h3>{{event.title}}</h3>
+                <p>{{event.description}}</p>
             </ion-item>
 
         </ion-list>
