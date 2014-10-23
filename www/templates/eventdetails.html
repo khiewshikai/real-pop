@@ -19,18 +19,26 @@
             </div>
             <div class="item item-divider">
             Attendees
+            <span class="badge badge-assertive">1/{{event.attendees.length + 1}}
+            </span>
             </div>
             
             <a class="item item-avatar" href="#">
                 <img src="venkman.jpg">
-                <h2>{{event.owner}}</h2>
+                <h2><img src="../img/onlineicon.png" position="right">{{event.owner}}</h2>
             </a> 
 
             <div ng-repeat="attendee in event.attendees">
-                <a class="item item-avatar" href="#">
-                <img src="venkman.jpg">                
-                <h2>{{attendee}}</h2>
+                <a class="item item-avatar item-icon-right" href="#">
+                <img src="venkman.jpg">             
+                
+                <h2><img src="../img/offlineicon.png" position="right">{{attendee}}
+                </h2>
+                
                 </a>
+
+                
+
             </div>
         </div>            
             
