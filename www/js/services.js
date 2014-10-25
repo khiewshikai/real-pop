@@ -3,24 +3,29 @@ var myApp = angular.module('starter.services', []);
 /**
  * A simple example service that returns some data.
  */
+<<<<<<< HEAD
 myApp.factory('PetService', function() {
+=======
+.factory('EventService', function() {
+>>>>>>> add-Event-details
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var pets = [
-    { id: 0, title: 'Cats', description: 'Furry little creatures. Obsessed with plotting assassination, but never following through on it.' },
-    { id: 1, title: 'Dogs', description: 'Lovable. Loyal almost to a fault. Smarter than they let on.' },
-    { id: 2, title: 'Turtles', description: 'Everyone likes turtles.' },
-    { id: 3, title: 'Sharks', description: 'An advanced pet. Needs millions of gallons of salt water. Will happily eat you.' }
+  var events = [
+    { id: 0, title: 'Mobile Pervasive Meeting', description: 'Meet up and develop the next cool idea!', date:'24 November 2014', timeStart:'1230', timeEnd:'1545', venue:'SIS GSR 2.4', penalty:'Treat kopi', owner:'Khiew Shi Kai', attendees:['Izzuddin', 'Brindha', 'Cruz'] },
+    { id: 1, title: 'Para Para Dance Meeting', description: 'Time to dance, dance, dance.', date:'25 November 2014', timeStart:'1230', timeEnd:'1545', venue:'SIS GSR 2.4', penalty:'Treat beer', owner:'Khiew Shi Kai', attendees:['Cruz'] },
+    { id: 2, title: 'Super Secret Stuff', description: 'Discuss behind closed doors.',date:'26 November 2014', timeStart:'1230', timeEnd:'1545', venue:'SIS GSR 2.4', penalty:'Treat kopi', owner:'Khiew Shi Kai', attendees:['Izzuddin', 'Cruz'] },
+    { id: 3, title: 'Food Food Food', description: 'Grab an awesome meal together!',date:'27 November 2014', timeStart:'1230', timeEnd:'1545', venue:'SIS GSR 2.4', penalty:'Treat Meal', owner:'Khiew Shi Kai', attendees:['Izzuddin'] }
   ];
+
 
   return {
     all: function() {
-      return pets;
+      return events;
     },
-    get: function(petId) {
+    get: function(eventId) {
       // Simple index lookup
-      return pets[petId];
+      return events[eventId];
     }
   }
 });

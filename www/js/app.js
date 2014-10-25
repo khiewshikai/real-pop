@@ -20,20 +20,42 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
     .state('home', {
       url: '/home',
       templateUrl: 'templates/home.html',
-      controller: 'PetIndexCtrl'
+      controller: 'EventIndexCtrl'
     })
     
     .state('addfriend', {
       url: '/addfriend',
       templateUrl: 'templates/addfriend.html',
-      controller: 'PetIndexCtrl'
+      controller: 'EventIndexCtrl'
     })
     
     .state('addevent', {
       url: '/addevent',
       templateUrl: 'templates/addevent.html',
+<<<<<<< HEAD
       controller: 'PetIndexCtrl'
     });
+=======
+      controller: 'EventIndexCtrl'
+    })
+    
+    .state('event', {
+      url: '/event/:eventId',
+      templateUrl: 'templates/eventdetails.html',
+      controller: 'EventDetailCtrl'
+    })
+    
+    
+//    .state('event', {
+//      url: '/event/:eventId',
+//      views: {
+//        'events-tab': {
+//          templateUrl: 'templates/eventdetails.html',
+//          controller: 'EventDetailCtrl'
+//        }
+//      }
+//    })
+>>>>>>> add-Event-details
 
 
 //    // the pet tab has its own child nav-view and history

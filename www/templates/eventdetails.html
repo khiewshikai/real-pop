@@ -1,0 +1,56 @@
+<ion-view title="{{event.title}}">
+    <ion-nav-buttons side="right">
+        <button class="button-icon button-clear" onclick="window.location = '#/home'"><i class="icon white ion-edit"></i></button>
+    </ion-nav-buttons>
+    <ion-content padding="true">
+       
+        <div>
+            <img src="../img/coffee.jpg" height="200" width="100%">
+        </div>
+       
+        <div class="list">
+            <div class="item item-text-wrap">
+            When: {{event.date}}, {{event.timeStart}} - {{event.timeEnd}}
+            <br/>
+            Venue: {{event.venue}}
+            <hr>
+            <h3>Penalty: {{event.penalty}}</h3>
+            
+            </div>
+            <div class="item item-divider">
+            Attendees
+            <span class="badge badge-assertive">1/{{event.attendees.length + 1}}
+            </span>
+            </div>
+            
+            <a class="item item-avatar" href="#">
+                <img src="venkman.jpg">
+                <h2><img src="../img/onlineicon.png" position="right">{{event.owner}}</h2>
+            </a> 
+
+            <div ng-repeat="attendee in event.attendees">
+                <a class="item item-avatar item-icon-right" href="#">
+                <img src="venkman.jpg">             
+                
+                <h2><img src="../img/offlineicon.png" position="right">{{attendee}}
+                </h2>
+                
+                </a>
+
+                
+
+            </div>
+        </div>            
+            
+            
+
+                
+
+
+            
+
+           
+        
+
+    </ion-content>
+</ion-view>
