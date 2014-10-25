@@ -32,10 +32,6 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
     .state('addevent', {
       url: '/addevent',
       templateUrl: 'templates/addevent.html',
-<<<<<<< HEAD
-      controller: 'PetIndexCtrl'
-    });
-=======
       controller: 'EventIndexCtrl'
     })
     
@@ -46,16 +42,6 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
     })
     
     
-//    .state('event', {
-//      url: '/event/:eventId',
-//      views: {
-//        'events-tab': {
-//          templateUrl: 'templates/eventdetails.html',
-//          controller: 'EventDetailCtrl'
-//        }
-//      }
-//    })
->>>>>>> add-Event-details
 
 
 //    // the pet tab has its own child nav-view and history
