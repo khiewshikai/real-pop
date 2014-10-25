@@ -1,8 +1,8 @@
-angular.module('starter.controllers', ['angular-datepicker'])
+var myApp =angular.module('starter.controllers', ['angular-datepicker']);
 
 
 // A simple controller that fetches a list of data from a service
-.controller('PetIndexCtrl', function($scope, PetService, $ionicModal) {
+myApp.controller('PetIndexCtrl', function($scope, PetService, $ionicModal) {
   // "Pets" is a service returning mock data (services.js)
   $scope.pets = PetService.all();
     $ionicModal.fromTemplateUrl('add-members.html', {
@@ -29,11 +29,11 @@ angular.module('starter.controllers', ['angular-datepicker'])
     $scope.$on('modal.removed', function() {
       // Execute action
     });
-})
+});
 
 
 // A simple controller that shows a tapped item's data
-.controller('PetDetailCtrl', function($scope, $stateParams, PetService) {
+myApp.controller('PetDetailCtrl', function($scope, $stateParams, PetService) {
   // "Pets" is a service returning mock data (services.js)
   $scope.pet = PetService.get($stateParams.petId);
 });

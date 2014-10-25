@@ -5,10 +5,10 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', 'angular-datepicker'])
+var myApp = angular.module('starter', ['ionic', "firebase", 'starter.services', 'starter.controllers', 'angular-datepicker']);
 
 
-.config(function($stateProvider, $urlRouterProvider) {
+myApp.config(function($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -33,7 +33,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
       url: '/addevent',
       templateUrl: 'templates/addevent.html',
       controller: 'PetIndexCtrl'
-    })
+    });
 
 
 //    // the pet tab has its own child nav-view and history
