@@ -17,6 +17,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
     // setup an abstract state for the tabs directive
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl'
+    })
+    
     .state('home', {
       url: '/home',
       templateUrl: 'templates/home.html',

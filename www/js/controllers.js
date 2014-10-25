@@ -1,34 +1,64 @@
-var myApp =angular.module('starter.controllers', ['angular-datepicker']);
+var myApp = angular.module('starter.controllers', ['firebase', 'angular-datepicker']);
+
+// login in controller
+myApp.controller("LoginCtrl", function ($scope, $rootScope, $firebase) {
+    
+    // connect to the database
+    var firebaseRef = new Firebase("https://smu-pop.firebaseio.com/users");
+    var sync = $firebase(firebaseRef);
+    $rootScope.usersData = sync.$asArray();
+    
+    $rootScope.usersData.$loaded().then(function () {
+        console.log("usersData loaded");
+    });
+    
+    // initialise a model object to bind input form
+    $scope.model = {};
+
+    $scope.login = function() {
+        console.log($rootScope.usersData);
+        for(var i=0; i < $rootScope.usersData.length; i++) {
+            var userObj = $rootScope.usersData[i];
+            if ($scope.model.username === userObj.username) {
+                if ($scope.model.password === userObj.password) {
+                    console.log("success");
+                    window.location = '#/home';
+                    return;
+                }
+            }
+        }
+        console.log("failed");
+    };
+});
 
 
 // A simple controller that fetches a list of data from a service
-
-myApp.controller('EventIndexCtrl', function($scope, EventService, $ionicModal) {
-  // "Pets" is a service returning mock data (services.js)
-  $scope.events = EventService.all();
+myApp.controller('EventIndexCtrl', function ($scope, EventService, $ionicModal) {
+    // "Pets" is a service returning mock data (services.js)
+    $scope.events = EventService.all();
     $ionicModal.fromTemplateUrl('add-members.html', {
-      scope: $scope,
-      animation: 'slide-in-up'
-    }).then(function(modal) {
-      $scope.modal = modal;
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.modal = modal;
     });
-    $scope.openModal = function() {
-      $scope.modal.show();
+    $scope.openModal = function () {
+        $scope.modal.show();
     };
-    $scope.closeModal = function() {
-      $scope.modal.hide();
+    $scope.closeModal = function () {
+        $scope.modal.hide();
     };
     //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function() {
-      $scope.modal.remove();
+    $scope.$on('$destroy', function () {
+        $scope.modal.remove();
     });
     // Execute action on hide modal
-    $scope.$on('modal.hidden', function() {
-      // Execute action
+    $scope.$on('modal.hidden', function () {
+        // Execute action
     });
     // Execute action on remove modal
-    $scope.$on('modal.removed', function() {
-      // Execute action
+    $scope.$on('modal.removed', function () {
+        // Execute action
     });
 });
 
@@ -49,7 +79,7 @@ myApp.controller('EventIndexCtrl', function($scope, EventService, $ionicModal) {
 
 
 // A simple controller that shows a tapped item's data
-myApp.controller('EventDetailCtrl', function($scope, $stateParams, EventService) {
-  // "Pets" is a service returning mock data (services.js)
-  $scope.event = EventService.get($stateParams.eventId);
+myApp.controller('EventDetailCtrl', function ($scope, $stateParams, EventService) {
+    // "Pets" is a service returning mock data (services.js)
+    $scope.event = EventService.get($stateParams.eventId);
 });
