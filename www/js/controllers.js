@@ -2,22 +2,22 @@ var myApp = angular.module('starter.controllers', ['firebase', 'angular-datepick
 
 // login in controller
 myApp.controller("LoginCtrl", function ($scope, $rootScope, $firebase) {
-    
+
     // connect to the database
     var firebaseRef = new Firebase("https://smu-pop.firebaseio.com/users");
     var sync = $firebase(firebaseRef);
     $rootScope.usersData = sync.$asArray();
-    
+
     $rootScope.usersData.$loaded().then(function () {
         console.log("usersData loaded");
     });
-    
+
     // initialise a model object to bind input form
     $scope.model = {};
 
-    $scope.login = function() {
+    $scope.login = function () {
         console.log($rootScope.usersData);
-        for(var i=0; i < $rootScope.usersData.length; i++) {
+        for (var i = 0; i < $rootScope.usersData.length; i++) {
             var userObj = $rootScope.usersData[i];
             if ($scope.model.username === userObj.username) {
                 if ($scope.model.password === userObj.password) {
@@ -82,4 +82,37 @@ myApp.controller('EventIndexCtrl', function ($scope, EventService, $ionicModal) 
 myApp.controller('EventDetailCtrl', function ($scope, $stateParams, EventService) {
     // "Pets" is a service returning mock data (services.js)
     $scope.event = EventService.get($stateParams.eventId);
-});
+})
+
+// A simple controller that fetches a list of data from a service
+        .controller('ProfileIndexCtrl', function ($scope, ProfileService, $ionicModal) {
+            // "Pets" is a service returning mock data (services.js)
+            $scope.profiles = ProfileService.all();
+            $ionicModal.fromTemplateUrl('modal.html', function ($ionicModal) {
+                $scope.modal = $ionicModal;
+            }, {
+                // Use our scope for the scope of the modal to keep it simple
+                scope: $scope,
+                // The animation we want to use for the modal entrance
+                animation: 'slide-in-up'
+            });
+        })
+
+        .controller('ProfileDetailCtrl', function ($scope, $stateParams, ProfileService) {
+            // "Pets" is a service returning mock data (services.js)
+            $scope.profile = ProfileService.get($stateParams.profileId);
+        })
+        
+        .controller('liveLabCtrl', function ($scope, $http) {
+            $scope.aaa = function () {
+                $http.post('http://athena.smu.edu.sg/hestia/livelabs/index.php/authenticate/login_others ', {username: 'yslim.2012@sis.smu.edu.sg', password: '9402', appid: '140951'}).
+                        success(function (data, status, headers, config) {
+                            $scope.result = status;
+                            console.log(status);
+                        }).
+                        error(function (data, status, headers, config) {
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                        });
+            };
+        });

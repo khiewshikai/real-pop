@@ -25,5 +25,27 @@ myApp.factory('EventService', function() {
       // Simple index lookup
       return events[eventId];
     }
-  }
+  };
+})
+
+.factory('ProfileService', function() {
+  // Might use a resource here that returns a JSON array
+
+  // Some fake testing data
+  var profiles = [
+    { id: 0, title: 'Cruz', description: 'Punctual King' },
+    { id: 1, title: 'Brindha', description: 'Let it go!' },
+    { id: 2, title: 'Shi Kai', description: 'Silent is gold' },
+    { id: 3, title: 'Izzuddin', description: 'Love is so fluffy' }
+  ];
+
+  return {
+    all: function() {
+      return profiles;
+    },
+    get: function(profileId) {
+      // Simple index lookup
+      return profiles[profileId];
+    }
+  };
 });

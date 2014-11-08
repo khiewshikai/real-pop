@@ -8,46 +8,60 @@
 var myApp = angular.module('starter', ['ionic', "firebase", 'starter.services', 'starter.controllers', 'angular-datepicker']);
 
 
-myApp.config(function($stateProvider, $urlRouterProvider) {
+myApp.config(function ($stateProvider, $urlRouterProvider) {
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
-  $stateProvider
+    // Ionic uses AngularUI Router which uses the concept of states
+    // Learn more here: https://github.com/angular-ui/ui-router
+    // Set up the various states which the app can be in.
+    // Each state's controller can be found in controllers.js
+    $stateProvider
 
-    // setup an abstract state for the tabs directive
-    .state('login', {
-      url: '/login',
-      templateUrl: 'templates/login.html',
-      controller: 'LoginCtrl'
-    })
-    
-    .state('home', {
-      url: '/home',
-      templateUrl: 'templates/home.html',
-      controller: 'EventIndexCtrl'
-    })
-    
-    .state('addfriend', {
-      url: '/addfriend',
-      templateUrl: 'templates/addfriend.html',
-      controller: 'EventIndexCtrl'
-    })
-    
-    .state('addevent', {
-      url: '/addevent',
-      templateUrl: 'templates/addevent.html',
-      controller: 'EventIndexCtrl'
-    })
-    
-    .state('event', {
-      url: '/event/:eventId',
-      templateUrl: 'templates/eventdetails.html',
-      controller: 'EventDetailCtrl'
-    })
-    
-    
+            // setup an abstract state for the tabs directive
+            .state('login', {
+                url: '/login',
+                templateUrl: 'templates/login.html',
+                controller: 'LoginCtrl'
+            })
+
+            .state('home', {
+                url: '/home',
+                templateUrl: 'templates/home.html',
+                controller: 'EventIndexCtrl'
+            })
+
+            .state('addfriend', {
+                url: '/addfriend',
+                templateUrl: 'templates/addfriend.html',
+                controller: 'EventIndexCtrl'
+            })
+
+            .state('addevent', {
+                url: '/addevent',
+                templateUrl: 'templates/addevent.html',
+                controller: 'EventIndexCtrl'
+            })
+
+            .state('event', {
+                url: '/event/:eventId',
+                templateUrl: 'templates/eventdetails.html',
+                controller: 'EventDetailCtrl'
+            })
+            .state('profile', {
+                url: '/profile',
+                templateUrl: 'templates/profile.html',
+                controller: 'ProfileIndexCtrl'
+            })
+            .state('ranking', {
+                url: '/ranking',
+                templateUrl: 'templates/ranking.html',
+                controller: 'ProfileIndexCtrl'
+            })
+            .state('livelab', {
+                url: '/livelab',
+                templateUrl: 'templates/liveLabLogin.html',
+                controller: 'liveLabCtrl'
+            });
+
 
 
 //    // the pet tab has its own child nav-view and history
@@ -89,8 +103,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 //      }
 //    });
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/home');
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/home');
 
 });
 
