@@ -1,4 +1,4 @@
-var myApp = angular.module('starter.controllers', ['firebase', 'angular-datepicker']);
+var myApp = angular.module('starter.controllers', ['firebase', 'angular-datepicker', 'ngMap']);
 
 // login in controller
 myApp.controller("LoginCtrl", function ($scope, $rootScope, $firebase) {
@@ -22,10 +22,12 @@ myApp.controller("LoginCtrl", function ($scope, $rootScope, $firebase) {
             if ($scope.model.username === userObj.username) {
                 if ($scope.model.password === userObj.password) {
                     console.log("success");
+                    $rootScope.loginUser = userObj.username;
                     window.location = '#/home';
                     return;
                 }
             }
+
         }
         console.log("failed");
     };
@@ -86,23 +88,14 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, EventService
 
 // A simple controller that fetches a list of data from a service
         .controller('ProfileIndexCtrl', function ($scope, ProfileService, $ionicModal) {
-            // "Pets" is a service returning mock data (services.js)
-            $scope.profiles = ProfileService.all();
-            $ionicModal.fromTemplateUrl('modal.html', function ($ionicModal) {
-                $scope.modal = $ionicModal;
-            }, {
-                // Use our scope for the scope of the modal to keep it simple
-                scope: $scope,
-                // The animation we want to use for the modal entrance
-                animation: 'slide-in-up'
-            });
+            $rootScope.loginUser
         })
 
         .controller('ProfileDetailCtrl', function ($scope, $stateParams, ProfileService) {
             // "Pets" is a service returning mock data (services.js)
             $scope.profile = ProfileService.get($stateParams.profileId);
         })
-        
+
         .controller('liveLabCtrl', function ($scope, $http) {
             $scope.aaa = function () {
                 $http.post('http://athena.smu.edu.sg/hestia/livelabs/index.php/authenticate/login_others ', {username: 'yslim.2012@sis.smu.edu.sg', password: '9402', appid: '140951'}).
@@ -115,4 +108,38 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, EventService
                             // or server returns response with an error status.
                         });
             };
+        })
+
+        .controller('locationCtrl', function ($scope, $ionicLoading) {
+
+            $scope.positions = [{
+                    lat: 1.292849,
+                    lng: 103.858993
+                }];
+
+            $scope.$on('mapInitialized', function (event, map) {
+                $scope.map = map;
+            });
+
+            $scope.centerOnMe = function () {
+                $scope.positions = [];
+
+
+                $ionicLoading.show({
+                    template: 'Loading...'
+                });
+
+
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    $scope.positions.push({lat: pos.k, lng: pos.B});
+                    console.log(pos);
+                    $scope.map.setCenter(pos);
+                    $ionicLoading.hide();
+                });
+
+            };
+
         });
+
+        

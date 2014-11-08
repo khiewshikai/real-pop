@@ -60,6 +60,11 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
                 url: '/livelab',
                 templateUrl: 'templates/liveLabLogin.html',
                 controller: 'liveLabCtrl'
+            })
+            .state('location', {
+                url: '/location',
+                templateUrl: 'templates/location.html',
+                controller: 'locationCtrl'
             });
 
 
