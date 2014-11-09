@@ -108,10 +108,11 @@ myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaT
     };
 });
 
-myApp.controller("RankingCtrl", function ($scope, MasterDataService) {
+myApp.controller("RankingCtrl", function ($scope, MasterDataService, RankingService) {
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
     
     $scope.friendsList = [MasterDataService.getLoggedInUser()];
+    $scope.avartarList = [];
 
     var friendsEmailList = MasterDataService.getFriends();
     for (var i = 0; i < friendsEmailList.length; i++) {
@@ -120,6 +121,12 @@ myApp.controller("RankingCtrl", function ($scope, MasterDataService) {
     }
     
     $scope.friendsList.sort(comparePoints);
+    for (var i = 0; i < $scope.friendsList.length; i++) {
+        var avartar = RankingService.getAvartar($scope.friendsList[i].points);
+        $scope.avartarList.push(avartar);
+    }
+    
+    console.log($scope.avartarList);
     console.log($scope.friendsList);
 });
 

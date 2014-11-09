@@ -78,6 +78,32 @@ myApp.factory('MasterDataService', function ($firebase) {
     };
 });
 
+myApp.factory('RankingService', function () {
+    return {
+        getAvartar: function (points) {
+            if (points <= -50) {
+                return "img/Forever-Late.png";
+            }
+            if (points <= -30) {
+                return "img/Kena-Marked.png";
+            }
+            if (points <= -10) {
+                return "img/The Late.png";
+            }
+            if (points >= 100) {
+                return "img/Supreme Punctual Rajesh.png";
+            }
+            if (points >= 50) {
+                return "img/Always-early Ninja.png";
+            }
+            if (points >= 25) {
+                return "img/Just-in-time.png";
+            }
+            return "img/The Rookie.png";
+        }
+    };
+});
+
 
 myApp.factory('EventService', function () {
 

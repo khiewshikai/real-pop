@@ -173,7 +173,7 @@ ion-content {
     width: auto;
     height: 50%;
     font-size: 14px;
-    max-width: 140px;
+    max-width: 120px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -185,7 +185,7 @@ ion-content {
     height: 50%;
     font-size: 10px;
     color: #656D78;
-    max-width: 140px;
+    max-width: 120px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -199,10 +199,10 @@ ion-content {
     height: 100%;
     width: 60px;
     padding-top: 18px;
-    padding-right: 10px;
+    /*padding-right: 10px;*/
     border-left: 1px solid #ddd;
     float: right;
-    text-align: right;
+    text-align: center;
 }
 
 .rankingList > .listItem > .pp {

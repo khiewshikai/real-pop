@@ -8,9 +8,9 @@
     <ion-content padding="true" class="contentContainer">
         
         <div class="rankingList">
-            <div class="listItem" ng-repeat="friend in friendsList">
+            <div class="listItem" ng-repeat="friend in friendsList track by $index">
                 <div class="rank">1</div>
-                <div class="avatar"><img src="img/ninja bean.png" alt=""/></div>
+                <div class="avatar"><img src='{{avartarList[$index]}}' alt=""/></div>
                 <div class="details">
                     <div class="name you" ng-if="friend.name == loggedInUser.name">You</div>
                     <div class="name" ng-if="friend.name != loggedInUser.name">{{friend.name}}</div>
