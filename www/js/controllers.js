@@ -1,25 +1,70 @@
 var myApp = angular.module('starter.controllers', ['firebase', 'angular-datepicker']);
 
 // login and sign up controller
-myApp.controller("LoginCtrl", function ($scope, MasterDataService,$ionicLoading) {
+myApp.controller("LoginCtrl", function ($scope, MasterDataService, $cordovaToast) {
     // initialise a model object to bind input form
     $scope.model = {};
 
     $scope.login = function () {
-        var login = MasterDataService.authenticateUser($scope.model.username, $scope.model.password);
+        var login = MasterDataService.authenticateUser($scope.model.email, $scope.model.password);
         if (login) {
             window.location = '#/home';
         } else {
-            $scope.errorMsg = "Opps! Wrong username and/or password!";
+            $cordovaToast.show('Opps! Wrong email and/or password!', 'short', 'bottom');
         }
     };
-    
+
     $scope.signup = function () {
-        console.log($scope.model.newEmail);
-        console.log($scope.model.newPW);
-        console.log($scope.model.newCfmPW);
-        $ionicLoading.show({ template: 'Item Added!', noBackdrop: true, duration: 2000 });
+        if (!$scope.model.newEmail || !$scope.model.newPW || !$scope.model.newCfmPW) {
+            $cordovaToast.show('Please complete all the fields', 'short', 'bottom');
+            return;
+        }
+        if (!validateEmail($scope.model.newEmail)) {
+            $cordovaToast.show('Invalid email!', 'short', 'bottom');
+            return;
+        }
+        if ($scope.model.newPW.length < 6) {
+            $cordovaToast.show('Password need a minimum length of 6', 'short', 'bottom');
+            return;
+        }
+        if ($scope.model.newPW != $scope.model.newCfmPW) {
+            $cordovaToast.show('Passwords do not match', 'short', 'bottom');
+            return;
+        }
+        if ($scope.model.newPW.checkUserExist($scope.model.newEmail)) {
+            $cordovaToast.show('Account exists', 'short', 'bottom');
+            return;
+        }
+        
+        var userObj = {
+            "email": $scope.model.newEmail,
+            "password": $scope.model.newPW,
+            "points": 100
+        };
+
+        MasterDataService.addNewUser(userObj);
+
+        var createStatus = "";
+        setTimeout(function () {
+            createStatus = MasterDataService.getCreateStatus();
+            console.log(createStatus);
+            if (createStatus == "success") {
+//                window.location = '#/login';
+                $cordovaToast.show('Account created!', 'short', 'bottom').then(function(success) {
+                    window.location = '#/login';
+                }, function (error) {
+                    console.log("The toast was not shown due to " + error);
+                });
+            } else {
+                $cordovaToast.show('Sorry, an error occurred!', 'long', 'bottom');
+            }
+        }, 3000);
     };
+
+    function validateEmail(email) {
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
 });
 
 
@@ -27,7 +72,7 @@ myApp.controller('EventIndexCtrl', function ($scope, EventService, $ionicModal, 
 
     // get events from service
     $scope.events = EventService.all();
-    
+
     // pop up dialog
     $ionicModal.fromTemplateUrl('add-members.html', {
         scope: $scope,

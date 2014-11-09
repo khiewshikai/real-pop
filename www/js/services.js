@@ -4,18 +4,23 @@ myApp.factory('MasterDataService', function ($firebase) {
     var firebaseRef = new Firebase("https://smu-pop.firebaseio.com/users");
     var sync = $firebase(firebaseRef);
     var allUsersArray = sync.$asArray();
-
+    
+    // store the user logged in
     var loggedInUser = {};
+    
+    // create user success?
+    var createNewUserSuccess = "";
 
     // methods for getting data
     return {
         allUsers: function () {
             return allUsersArray;
         },
-        authenticateUser: function (username, pw) {
+        authenticateUser: function (email, pw) {
             for (var i = 0; i < allUsersArray.length; i++) {
                 var userObj = allUsersArray[i];
-                if (username === userObj.username) {
+                
+                if (email === userObj.email) {
                     if (pw === userObj.password) {
                         console.log("success");
                         loggedInUser = userObj;
@@ -29,6 +34,30 @@ myApp.factory('MasterDataService', function ($firebase) {
         },
         getLoggedInUser: function () {
             return loggedInUser;
+        },
+        checkUserExist: function (email) {
+            for (var i = 0; i < allUsersArray.length; i++) {
+                var userObj = allUsersArray[i];
+                // account exist
+                if (email === userObj.email) {
+                    return true;
+                }
+            }
+        },
+        addNewUser: function (userObj) {
+            createNewUserSuccess = "pending";
+            
+            sync.$push(userObj).then(function () {
+                createNewUserSuccess = "success";
+            }, function () {
+                createNewUserSuccess = "fail";
+            });
+        },
+        getCreateStatus: function () {
+            return createNewUserSuccess;
+        },
+        resetCreateStatus: function () {
+            createNewUserSuccess = "";
         }
     };
 });

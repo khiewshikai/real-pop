@@ -16,8 +16,7 @@ ion-content::-webkit-scrollbar {
  display: none;
 }
 
-.topRounded,
-.roundedBorder {
+.topRounded {
     border-top-left-radius:8px;
     border-top-right-radius:8px;
 }
@@ -37,7 +36,8 @@ ion-content::-webkit-scrollbar {
 }
 
 ion-content {
-    border-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 /* login and signup page */
