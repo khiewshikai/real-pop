@@ -2,6 +2,12 @@ var myApp = angular.module('starter.controllers', ['firebase', 'angular-datepick
 
 // login and sign up controller
 myApp.controller("LoginCtrl", function ($scope, MasterDataService, $cordovaToast) {
+    
+    console.log(MasterDataService.getLoggedInUser().email);
+    if (MasterDataService.getLoggedInUser().email) {
+        window.location = '#/home';
+    }
+    
     // initialise a model object to bind input form
     $scope.model = {};
 
@@ -111,27 +117,44 @@ myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaT
 myApp.controller("RankingCtrl", function ($scope, MasterDataService, RankingService) {
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
     
+    // get all the friends of this user
     $scope.friendsList = [MasterDataService.getLoggedInUser()];
     $scope.avartarList = [];
+    $scope.rankNameList = [];
+    $scope.rankList = [];
 
+    // retrieve all the friends object
     var friendsEmailList = MasterDataService.getFriends();
     for (var i = 0; i < friendsEmailList.length; i++) {
         var friendObj = MasterDataService.getUser(friendsEmailList[i]);
         $scope.friendsList.push(friendObj);
     }
     
+    // sort base on points
     $scope.friendsList.sort(comparePoints);
+    
+    // settle ranking and avartar
+    var rankCount = 1;
+    
     for (var i = 0; i < $scope.friendsList.length; i++) {
         var avartar = RankingService.getAvartar($scope.friendsList[i].points);
         $scope.avartarList.push(avartar);
+        var rank = RankingService.getRank($scope.friendsList[i].points);
+        $scope.rankNameList.push(rank);
+        
+        $scope.rankList.push(rankCount);
+        if (i != $scope.friendsList.length - 1) {
+            if ($scope.friendsList[i].points != $scope.friendsList[i+1].points) {
+                rankCount += 1;
+            }
+        }
     }
     
-    console.log($scope.avartarList);
-    console.log($scope.friendsList);
 });
 
 
 myApp.controller('EventIndexCtrl', function ($scope, EventService, $ionicModal, MasterDataService) {
+    console.log(MasterDataService.getLoggedInUser());
 
     // get events from service
     $scope.events = EventService.all();
@@ -161,6 +184,11 @@ myApp.controller('EventIndexCtrl', function ($scope, EventService, $ionicModal, 
     $scope.$on('modal.removed', function () {
         // Execute action
     });
+    
+    $scope.logout = function () {
+        MasterDataService.logout();
+//        window.location = '#/login';
+    };
 });
 
 

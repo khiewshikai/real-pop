@@ -9,12 +9,12 @@
         
         <div class="rankingList">
             <div class="listItem" ng-repeat="friend in friendsList track by $index">
-                <div class="rank">1</div>
+                <div class="rank">{{rankList[$index]}}</div>
                 <div class="avatar"><img src='{{avartarList[$index]}}' alt=""/></div>
                 <div class="details">
                     <div class="name you" ng-if="friend.name == loggedInUser.name">You</div>
                     <div class="name" ng-if="friend.name != loggedInUser.name">{{friend.name}}</div>
-                    <div class="email">{{friend.email}}</div>
+                    <div class="email">{{rankNameList[$index]}}</div>
                 </div>
                 <div class="points">{{friend.points}}</div>
                 <div class="pp">

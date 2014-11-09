@@ -6,7 +6,7 @@ myApp.factory('MasterDataService', function ($firebase) {
     var allUsersArray = sync.$asArray();
 
     // store the user logged in
-    var loggedInUser = {};
+    var loggedInUser = JSON.parse(window.localStorage['userSession'] || '{}');
 
     // create user success?
     var createNewUserSuccess = "";
@@ -24,6 +24,7 @@ myApp.factory('MasterDataService', function ($firebase) {
                     if (pw === userObj.password) {
                         console.log("success");
                         loggedInUser = userObj;
+                        window.localStorage['userSession'] = JSON.stringify(loggedInUser);
                         return true;
                     }
                 }
@@ -31,6 +32,12 @@ myApp.factory('MasterDataService', function ($firebase) {
             }
             console.log("login failed");
             return false;
+        },
+        logout: function () {
+            window.localStorage['userSession'] = '{}';
+            loggedInUser = {};
+            console.log("log out");
+            window.location = '#/login';
         },
         getLoggedInUser: function () {
             return loggedInUser;
@@ -90,16 +97,37 @@ myApp.factory('RankingService', function () {
             if (points <= -10) {
                 return "img/The Late.png";
             }
-            if (points >= 100) {
+            if (points >= 70) {
                 return "img/Supreme Punctual Rajesh.png";
             }
-            if (points >= 50) {
+            if (points >= 35) {
                 return "img/Always-early Ninja.png";
             }
-            if (points >= 25) {
+            if (points >= 10) {
                 return "img/Just-in-time.png";
             }
             return "img/The Rookie.png";
+        },
+        getRank: function (points) {
+            if (points <= -50) {
+                return "Forever-Late Bean";
+            }
+            if (points <= -30) {
+                return "Kena-Marked Bean";
+            }
+            if (points <= -10) {
+                return "The Late Bean";
+            }
+            if (points >= 70) {
+                return "Supreme Punctual Rajesh";
+            }
+            if (points >= 35) {
+                return "Always-early Ninja Bean";
+            }
+            if (points >= 10) {
+                return "Just-in-time Bean";
+            }
+            return "The Rookie Bean";
         }
     };
 });

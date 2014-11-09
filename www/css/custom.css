@@ -139,7 +139,7 @@ ion-content {
     color: #ef4756;
     display: inline-block;
     height: 100%;
-    width: 45px;
+    width: 40px;
     padding-top: 18px;
     float: left;
     text-align: center;
@@ -173,7 +173,7 @@ ion-content {
     width: auto;
     height: 50%;
     font-size: 14px;
-    max-width: 120px;
+    max-width: 100px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -185,7 +185,7 @@ ion-content {
     height: 50%;
     font-size: 10px;
     color: #656D78;
-    max-width: 120px;
+    max-width: 100px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -208,7 +208,7 @@ ion-content {
 .rankingList > .listItem > .pp {
     display: inline-block;
     height: 100%;
-    width: 60px;
+    width: auto;
     padding-top: 10px;
     padding-right: 8px;
     float: right;
