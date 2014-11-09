@@ -22,6 +22,12 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: 'templates/login.html',
                 controller: 'LoginCtrl'
             })
+            
+            .state('signup', {
+                url: '/signup',
+                templateUrl: 'templates/signup.html',
+                controller: 'LoginCtrl'
+            })
 
             .state('home', {
                 url: '/home',
@@ -109,7 +115,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
 //    });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/home');
+    $urlRouterProvider.otherwise('/login');
 
 });
 

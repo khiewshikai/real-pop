@@ -1,16 +1,21 @@
-<ion-view>
+<ion-view class="blackbg">
     <ion-content class="navbar-color">
-        <div class="list list-inset">
-            <label class="item item-input">
-                <input type="text" placeholder="username" name="username" ng-model="model.username">
-            </label>
-            <label class="item item-input">
-                <input type="password" placeholder="password" name="password" ng-model="model.password">
-            </label>
+        <div class="row">
+            <div class="logo"></div>
         </div>
         
-        <button class="button button-full button-light" ng-click="login()">
-            Full Width Block Button
-          </button>
+        <div class="loginForm">
+            <div class="row customInput">
+                <input type="text" placeholder="Email" name="username" ng-model="model.username">
+            </div>
+            <div class="row customInput">
+                <input type="password" placeholder="Password" name="password" ng-model="model.password">
+            </div>
+            <div class="row customInput">
+                <button class="loginBtn" ng-click="login()">Login</button>
+            </div>
+        </div>
+        
+        <div class="loginBottomText"><p onclick="window.location = '#/signup'">Create an account</p></div>
     </ion-content>
 </ion-view>

@@ -1,11 +1,17 @@
-<ion-view title="POP" class="blackbg">
-    <ion-nav-buttons side="left">
-        <button class="button-icon button-clear" ng-click=""><i class="icon white ion-clipboard"></i></button>
-    </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-        <button class="button-icon button-clear" onclick="window.location = '#/location'"><i class="icon white ion-ios7-person"></i></button>
-    </ion-nav-buttons>
-    <ion-content class="whitebg">
+<ion-view class="blackbg">
+    <!--    <ion-nav-buttons side="left">
+            <button class="button-icon button-clear" ng-click=""><i class="icon white ion-clipboard"></i></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <button class="button-icon button-clear" onclick="window.location = '#/location'"><i class="icon white ion-ios7-person"></i></button>
+        </ion-nav-buttons>-->
+
+    <div class="bar bar-header navbar-color">
+        <button class="button button-icon icon ion-clipboard white"></button>
+        <h1 class="title white">PoP</h1>
+        <button class="button button-icon icon ion-ios7-person white" onclick="window.location = '#/ranking'"></button>
+    </div>
+    <ion-content class="contentContainer">
 
         <ion-list>
 
@@ -13,7 +19,7 @@
                 <button class="col button button-clear" onclick="window.location = '#/addevent'">Add Event</button>
                 <button class="col  button button-clear" onclick="window.location = '#/addfriend'">Add Friend</button>
             </div>
-
+            <!--<button class="col  button button-clear" onclick="window.location = '#/location'">Location</button>-->
             <ion-item ng-repeat="event in events" type="item-text-wrap" href="#/event/{{event.id}}">
                 <h3>{{event.title}}</h3>
                 <p>{{event.description}}</p>

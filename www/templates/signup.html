@@ -1,0 +1,23 @@
+<ion-view class="blackbg">
+    <ion-content class="navbar-color">
+        <div class="row">
+            <div class="logo"></div>
+        </div>
+        <div class="loginForm">
+            <div class="row customInput">
+                <input type="text" placeholder="Email" name="newEmail" ng-model="model.newEmail">
+            </div>
+            <div class="row customInput">
+                <input type="password" placeholder="Password" name="newPW" ng-model="model.newPW">
+            </div>
+            <div class="row customInput">
+                <input type="password" placeholder="Confirm Password" name="newCfmPW" ng-model="model.newCfmPW">
+            </div>
+            <div class="row customInput">
+                <button class="loginBtn" ng-click="signup()">Create</button>
+            </div>
+        </div>
+
+        <div class="loginBottomText"><p onclick="window.location = '#/login'">I have an account</p></div>
+    </ion-content>
+</ion-view>
