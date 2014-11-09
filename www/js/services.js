@@ -4,10 +4,10 @@ myApp.factory('MasterDataService', function ($firebase) {
     var firebaseRef = new Firebase("https://smu-pop.firebaseio.com/users");
     var sync = $firebase(firebaseRef);
     var allUsersArray = sync.$asArray();
-    
+
     // store the user logged in
     var loggedInUser = {};
-    
+
     // create user success?
     var createNewUserSuccess = "";
 
@@ -19,7 +19,7 @@ myApp.factory('MasterDataService', function ($firebase) {
         authenticateUser: function (email, pw) {
             for (var i = 0; i < allUsersArray.length; i++) {
                 var userObj = allUsersArray[i];
-                
+
                 if (email === userObj.email) {
                     if (pw === userObj.password) {
                         console.log("success");
@@ -35,18 +35,18 @@ myApp.factory('MasterDataService', function ($firebase) {
         getLoggedInUser: function () {
             return loggedInUser;
         },
-        checkUserExist: function (email) {
+        getUser: function (email) {
             for (var i = 0; i < allUsersArray.length; i++) {
                 var userObj = allUsersArray[i];
                 // account exist
                 if (email === userObj.email) {
-                    return true;
+                    return userObj;
                 }
             }
         },
         addNewUser: function (userObj) {
             createNewUserSuccess = "pending";
-            
+
             sync.$push(userObj).then(function () {
                 createNewUserSuccess = "success";
             }, function () {
@@ -58,6 +58,22 @@ myApp.factory('MasterDataService', function ($firebase) {
         },
         resetCreateStatus: function () {
             createNewUserSuccess = "";
+        },
+        addFriend: function (email) {
+            console.log(loggedInUser.$id);
+            console.log(allUsersArray.indexOf(loggedInUser));
+            if (loggedInUser.friends) {
+                loggedInUser.friends.push(email);
+            } else {
+                loggedInUser.friends = [email];
+            }
+            allUsersArray.$save(loggedInUser);
+        },
+        getFriends: function () {
+            if (loggedInUser.friends) {
+                return loggedInUser.friends;
+            }
+            return [];
         }
     };
 });
@@ -87,24 +103,24 @@ myApp.factory('EventService', function () {
     };
 })
 
-        .factory('ProfileService', function () {
-            // Might use a resource here that returns a JSON array
+myApp.factory('ProfileService', function () {
+    // Might use a resource here that returns a JSON array
 
-            // Some fake testing data
-            var profiles = [
-                {id: 0, title: 'Cruz', description: 'Punctual King'},
-                {id: 1, title: 'Brindha', description: 'Let it go!'},
-                {id: 2, title: 'Shi Kai', description: 'Silent is gold'},
-                {id: 3, title: 'Izzuddin', description: 'Love is so fluffy'}
-            ];
+    // Some fake testing data
+    var profiles = [
+        {id: 0, title: 'Cruz', description: 'Punctual King'},
+        {id: 1, title: 'Brindha', description: 'Let it go!'},
+        {id: 2, title: 'Shi Kai', description: 'Silent is gold'},
+        {id: 3, title: 'Izzuddin', description: 'Love is so fluffy'}
+    ];
 
-            return {
-                all: function () {
-                    return profiles;
-                },
-                get: function (profileId) {
-                    // Simple index lookup
-                    return profiles[profileId];
-                }
-            };
-        });
+    return {
+        all: function () {
+            return profiles;
+        },
+        get: function (profileId) {
+            // Simple index lookup
+            return profiles[profileId];
+        }
+    };
+});

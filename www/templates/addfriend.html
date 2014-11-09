@@ -1,14 +1,14 @@
 <ion-view class="blackbg">
     <div class="bar bar-header navbar-color topRounded">
         <button class="button button-icon icon ion-arrow-left-c white" onclick="window.location = '#/home'"></button>
-        <h1 class="title white">PoP</h1>
-        <button class="button button-icon icon ion-checkmark white" onclick="window.location = '#/home'"></button>
+        <h1 class="title white">Add Friend</h1>
+        <button class="button button-icon icon ion-checkmark white" ng-click="addFriend()"></button>
     </div>
     <ion-content padding="true" class="contentContainer">
 
         <div class="list">
             <label class="item item-input">
-                <input type="text" placeholder="Student ID">
+                <input type="text" placeholder="Friend's email" ng-model="model.friendEmail">
             </label>
         </div>
 

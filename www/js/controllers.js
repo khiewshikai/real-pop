@@ -10,36 +10,45 @@ myApp.controller("LoginCtrl", function ($scope, MasterDataService, $cordovaToast
         if (login) {
             window.location = '#/home';
         } else {
+            console.log('Opps! Wrong email and/or password!');
             $cordovaToast.show('Opps! Wrong email and/or password!', 'short', 'bottom');
         }
     };
 
     $scope.signup = function () {
-        if (!$scope.model.newEmail || !$scope.model.newPW || !$scope.model.newCfmPW) {
+        if (!$scope.model.newEmail || !$scope.model.name || !$scope.model.newPW || !$scope.model.newCfmPW) {
+            console.log('Please complete all the fields');
             $cordovaToast.show('Please complete all the fields', 'short', 'bottom');
             return;
         }
         if (!validateEmail($scope.model.newEmail)) {
+            console.log('Invalid email!');
             $cordovaToast.show('Invalid email!', 'short', 'bottom');
             return;
         }
         if ($scope.model.newPW.length < 6) {
+            console.log('Password need a minimum length of 6');
             $cordovaToast.show('Password need a minimum length of 6', 'short', 'bottom');
             return;
         }
         if ($scope.model.newPW != $scope.model.newCfmPW) {
+            console.log('Passwords do not match');
             $cordovaToast.show('Passwords do not match', 'short', 'bottom');
             return;
         }
-        if ($scope.model.newPW.checkUserExist($scope.model.newEmail)) {
+        if (MasterDataService.getUser($scope.model.newEmail)) {
+            console.log('Account exists');
             $cordovaToast.show('Account exists', 'short', 'bottom');
             return;
         }
-        
+
         var userObj = {
             "email": $scope.model.newEmail,
             "password": $scope.model.newPW,
-            "points": 100
+            "points": 100,
+            "name": $scope.model.name,
+            "punctual": 0,
+            "penalty": 0
         };
 
         MasterDataService.addNewUser(userObj);
@@ -50,7 +59,7 @@ myApp.controller("LoginCtrl", function ($scope, MasterDataService, $cordovaToast
             console.log(createStatus);
             if (createStatus == "success") {
 //                window.location = '#/login';
-                $cordovaToast.show('Account created!', 'short', 'bottom').then(function(success) {
+                $cordovaToast.show('Account created!', 'short', 'bottom').then(function (success) {
                     window.location = '#/login';
                 }, function (error) {
                     console.log("The toast was not shown due to " + error);
@@ -65,6 +74,53 @@ myApp.controller("LoginCtrl", function ($scope, MasterDataService, $cordovaToast
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
+});
+
+myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaToast) {
+    // initialise a model object to bind input form
+    $scope.model = {};
+
+    $scope.addFriend = function () {
+        console.log(MasterDataService.getUser($scope.model.friendEmail));
+        if (!$scope.model.friendEmail) {
+            console.log("Please enter your friend's email");
+            $cordovaToast.show("Please enter your friend's email", 'short', 'center');
+            return;
+        }
+        if (MasterDataService.getLoggedInUser().email == $scope.model.friendEmail) {
+            console.log("Isn't that your email?");
+            $cordovaToast.show("Isn't that your email?", 'short', 'center');
+            return;
+        }
+        if (!MasterDataService.getUser($scope.model.friendEmail)) {
+            console.log("Opps! Account don't exists");
+            $cordovaToast.show("Opps! Account don't exists", 'short', 'center');
+            return;
+        }
+        // add in database
+        MasterDataService.addFriend($scope.model.friendEmail);
+
+        $cordovaToast.show('Friend added!', 'short', 'bottom').then(function (success) {
+            window.location = '#/home';
+        }, function (error) {
+            console.log("The toast was not shown due to " + error);
+        });
+    };
+});
+
+myApp.controller("RankingCtrl", function ($scope, MasterDataService) {
+    $scope.loggedInUser = MasterDataService.getLoggedInUser();
+    
+    $scope.friendsList = [MasterDataService.getLoggedInUser()];
+
+    var friendsEmailList = MasterDataService.getFriends();
+    for (var i = 0; i < friendsEmailList.length; i++) {
+        var friendObj = MasterDataService.getUser(friendsEmailList[i]);
+        $scope.friendsList.push(friendObj);
+    }
+    
+    $scope.friendsList.sort(comparePoints);
+    console.log($scope.friendsList);
 });
 
 
@@ -177,5 +233,21 @@ myApp.controller('locationCtrl', function ($scope, $ionicLoading) {
     };
 
 });
+
+function comparePoints(a, b) {
+    if (a.points > b.points) {
+        return -1;
+    } else if (a.points < b.points) {
+        return 1;
+    } else {
+        if (a.name < b.name) {
+            return -1;
+        } else if (a.name > b.name) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+};
 
         

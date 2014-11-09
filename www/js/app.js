@@ -38,7 +38,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
             .state('addfriend', {
                 url: '/addfriend',
                 templateUrl: 'templates/addfriend.html',
-                controller: 'EventIndexCtrl'
+                controller: 'AddFriendCtrl'
             })
 
             .state('addevent', {
@@ -60,7 +60,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
             .state('ranking', {
                 url: '/ranking',
                 templateUrl: 'templates/ranking.html',
-                controller: 'ProfileIndexCtrl'
+                controller: 'RankingCtrl'
             })
             .state('livelab', {
                 url: '/livelab',

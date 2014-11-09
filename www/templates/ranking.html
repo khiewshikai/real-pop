@@ -1,21 +1,48 @@
-<ion-view title="Ranking">
-    <ion-nav-buttons side="left">
-        <button class="button-icon button-clear" ng-click=""><i class="icon white ion-clipboard"></i></button>
-    </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-        <button class="button-icon button-clear" onclick="window.location = '#/profile'"><i class="icon white ion-ios7-person"></i></button>
-    </ion-nav-buttons>
-    <ion-content>
-        <div class="list">
-            <ion-list>
+<ion-view class="blackbg">
 
-                <ion-item class="item item-avatar" ng-repeat="profile in profiles" type="item-text-wrap" href="#/profile">
-                        <img src="img/rookie.png" alt="">
-                        <h3>{{profile.title}}</h3>
-                        <p>{{profile.description}}</p> 
-                </ion-item>
-
-            </ion-list>
+    <div class="bar bar-header navbar-color topRounded">
+        <button class="button button-icon icon ion-clipboard white"></button>
+        <h1 class="title white" onclick="window.location = '#/home'">PoP</h1>
+        <button class="button button-icon icon ion-ios7-person white"></button>
+    </div>
+    <ion-content padding="true" class="contentContainer">
+        
+        <div class="rankingList">
+            <div class="listItem" ng-repeat="friend in friendsList">
+                <div class="rank">1</div>
+                <div class="avatar"><img src="img/ninja bean.png" alt=""/></div>
+                <div class="details">
+                    <div class="name you" ng-if="friend.name == loggedInUser.name">You</div>
+                    <div class="name" ng-if="friend.name != loggedInUser.name">{{friend.name}}</div>
+                    <div class="email">{{friend.email}}</div>
+                </div>
+                <div class="points">{{friend.points}}</div>
+                <div class="pp">
+                    <div>+ {{friend.punctual}}</div>
+                    <div>- {{friend.penalty}}</div>
+                </div>
+            </div>
         </div>
+
     </ion-content>
+
+    <!--    <ion-nav-buttons side="left">
+            <button class="button-icon button-clear" ng-click=""><i class="icon white ion-clipboard"></i></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <button class="button-icon button-clear" onclick="window.location = '#/profile'"><i class="icon white ion-ios7-person"></i></button>
+        </ion-nav-buttons>-->
+    <!--    <ion-content>
+            <div class="list">
+                <ion-list>
+    
+                    <ion-item class="item item-avatar" ng-repeat="profile in profiles" type="item-text-wrap" href="#/profile">
+                            <img src="img/rookie.png" alt="">
+                            <h3>{{profile.title}}</h3>
+                            <p>{{profile.description}}</p> 
+                    </ion-item>
+    
+                </ion-list>
+            </div>
+        </ion-content>-->
 </ion-view>

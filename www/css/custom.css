@@ -13,7 +13,7 @@
 }
 
 ion-content::-webkit-scrollbar {
- display: none;
+    display: none;
 }
 
 .topRounded {
@@ -38,6 +38,15 @@ ion-content::-webkit-scrollbar {
 ion-content {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+.modal {
+    border-radius: 8px;
+}
+
+.contentContainer {
+    margin-top: 42px;
+    background-color: #ffffff;
 }
 
 /* login and signup page */
@@ -102,13 +111,133 @@ ion-content {
     margin-right: auto;
 }
 
+/*login and signup page ends*/
+
+.rankingList {
+    width: 100%;
+}
+
+.rankingList > .listItem {
+    border: 1px solid #ddd;
+    height: 60px;
+    margin-top: -1px;
+}
+
+.rankingList > .listItem:first-child {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.rankingList > .listItem:last-child {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.rankingList > .listItem > .rank {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ef4756;
+    display: inline-block;
+    height: 100%;
+    width: 45px;
+    padding-top: 18px;
+    float: left;
+    text-align: center;
+    border-right: 1px solid #ddd;
+}
+
+.rankingList > .listItem > .avatar {
+    display: inline-block;
+    float: left;
+    width: 50px;
+    height: 100%;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.rankingList > .listItem > .avatar > img {
+    width: 40px;
+    height: 40px;
+}
+
+.rankingList > .listItem > .details {
+    display: inline-block;
+    float: left;
+    width: auto;
+    height: 100%;
+    padding: 10px 10px;
+}
+
+.rankingList > .listItem > .details > .name {
+    display: block;
+    width: auto;
+    height: 50%;
+    font-size: 14px;
+    max-width: 140px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.rankingList > .listItem > .details > .email {
+    display: block;
+    width: auto;
+    height: 50%;
+    font-size: 10px;
+    color: #656D78;
+    max-width: 140px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.rankingList > .listItem > .points {
+    font-size: 20px;
+    font-weight: 700;
+    color: #48CFAD;
+    display: inline-block;
+    height: 100%;
+    width: 60px;
+    padding-top: 18px;
+    padding-right: 10px;
+    border-left: 1px solid #ddd;
+    float: right;
+    text-align: right;
+}
+
+.rankingList > .listItem > .pp {
+    display: inline-block;
+    height: 100%;
+    width: 60px;
+    padding-top: 10px;
+    padding-right: 8px;
+    float: right;
+    text-align: right;
+}
+
+.rankingList > .listItem > .pp > div {
+    display: block;
+    width: auto;
+    height: 18px;
+    font-size: 10px;
+    color: #656D78;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.you {
+    color: #ef4756;
+}
+
 .btnHeight {
     height: 60px;
 }
 
 .addMemberList {
-   padding-top: 43px;
-   height: 100%;
+    padding-top: 43px;
+    height: 100%;
 }
 
 .right-checkbox {
@@ -124,19 +253,4 @@ ion-content {
 .username {
     display:inline;
     float: left;
-}
-
-.modal {
-    border-radius: 8px;
-}
-
-.contentContainer {
-    margin-top: 44px;
-    background-color: #ffffff;
-}
-
-#loginError {
-    font-size: 16px;
-    text-align: center;
-    height: 30px;
 }
