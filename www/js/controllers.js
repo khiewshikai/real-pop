@@ -146,7 +146,9 @@ myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaT
         MasterDataService.addFriend($scope.model.friendEmail);
 
         $cordovaToast.show('Friend added!', 'short', 'bottom').then(function (success) {
-            window.location = '#/home';
+            setTimeout(function () {
+                window.location = '#/home';
+            }, 1500);
         }, function (error) {
             console.log("The toast was not shown due to " + error);
         });
@@ -258,10 +260,20 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
             "attendees": membersEmail
         };
         
-        console.log(eventObj.id);
-        MasterDataService.addFriend(eventObj.id);
-//        EventService.addEvent(eventObj);
-        console.log(eventObj);
+        // add event to all members
+        for(var i = 0; i < $scope.addedMembersList.length; i++) {
+            MasterDataService.addEvent($scope.addedMembersList[i], eventObj.id);
+        }
+        
+        EventService.addEvent(eventObj);
+        
+        $cordovaToast.show('Event added!', 'short', 'bottom').then(function (success) {
+            setTimeout(function () {
+                window.location = '#/home';
+            }, 1500);
+        }, function (error) {
+            console.log("The toast was not shown due to " + error);
+        });
     };
     
     // helper class -----------------------------------
@@ -332,13 +344,21 @@ myApp.controller("RankingCtrl", function ($scope, MasterDataService, RankingServ
 });
 
 
-myApp.controller('EventIndexCtrl', function ($scope, EventService, MasterDataService) {
+myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService) {
     console.log(MasterDataService.getLoggedInUser());
+    
+    $scope.loggedInUser = MasterDataService.getLoggedInUser();
 
-    // get events from service
-//    $scope.events = EventService.all();
-
-
+    $scope.eventsList = [];
+    
+    // get the events of this user
+    var eventsIdList = MasterDataService.getEvents();
+    for (var i = 0; i < eventsIdList.length; i++) {
+        var eventObj = EventService.getEvent(eventsIdList[i]);
+        $scope.eventsList.push(eventObj);
+    }
+    console.log($scope.eventsList);
+    
 
     $scope.logout = function () {
         MasterDataService.logout();

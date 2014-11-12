@@ -20,7 +20,7 @@
                 <button class="col  button button-clear" onclick="window.location = '#/addfriend'">Add Friend</button>
             </div>
             <!--<button class="col  button button-clear" onclick="window.location = '#/location'">Location</button>-->
-            <ion-item ng-repeat="event in events" type="item-text-wrap" href="#/event/{{event.id}}">
+            <ion-item ng-repeat="event in eventsList" type="item-text-wrap" href="#/event/{{event.id}}">
                 <h3>{{event.title}}</h3>
                 <p>{{event.description}}</p>
             </ion-item>

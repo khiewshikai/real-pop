@@ -50,6 +50,7 @@ myApp.factory('MasterDataService', function ($firebase) {
                     return userObj;
                 }
             }
+            return {};
         },
         addNewUser: function (userObj) {
             createNewUserSuccess = "pending";
@@ -82,14 +83,19 @@ myApp.factory('MasterDataService', function ($firebase) {
             }
             return [];
         },
-        addEvent: function (event) {
-            console.log(loggedInUser.events);
-            if (loggedInUser.friends) {
-                loggedInUser.friends.push(event);
-            } else {
-                loggedInUser.friends = [event];
+        getEvents: function () {
+            if (loggedInUser.events) {
+                return loggedInUser.events;
             }
-            allUsersArray.$save(loggedInUser);
+            return [];
+        },
+        addEvent: function (member, event) {
+            if (member.events) {
+                member.events.push(event);
+            } else {
+                member.events = [event];
+            }
+            allUsersArray.$save(member);
         }
     };
 });
@@ -158,14 +164,20 @@ myApp.factory('EventService', function ($firebase) {
     var sync = $firebase(firebaseRef);
     var allEventsArray = sync.$asArray();
 
-
     return {
-        allEvents: function () {
+        getAllEvents: function () {
             return allEventsArray;
         },
         getEvent: function (eventId) {
             // Simple index lookup
-            return allEventsArray[eventId];
+            for (var i = 0; i < allEventsArray.length; i++) {
+                var eventObj = allEventsArray[i];
+                // account exist
+                if (eventId === eventObj.id) {
+                    return eventObj;
+                }
+            }
+            return {};
         },
         addEvent: function (eventObj) {
             sync.$push(eventObj);
