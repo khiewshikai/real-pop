@@ -81,6 +81,15 @@ myApp.factory('MasterDataService', function ($firebase) {
                 return loggedInUser.friends;
             }
             return [];
+        },
+        addEvent: function (event) {
+            console.log(loggedInUser.events);
+            if (loggedInUser.friends) {
+                loggedInUser.friends.push(event);
+            } else {
+                loggedInUser.friends = [event];
+            }
+            allUsersArray.$save(loggedInUser);
         }
     };
 });
@@ -133,29 +142,36 @@ myApp.factory('RankingService', function () {
 });
 
 
-myApp.factory('EventService', function () {
+myApp.factory('EventService', function ($firebase) {
 
     // Might use a resource here that returns a JSON array
 
     // Some fake testing data
-    var events = [
-        {id: 0, title: 'Mobile Pervasive Meeting', description: 'Meet up and develop the next cool idea!', date: '24 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat kopi', owner: 'Khiew Shi Kai', attendees: ['Izzuddin', 'Brindha', 'Cruz']},
-        {id: 1, title: 'Para Para Dance Meeting', description: 'Time to dance, dance, dance.', date: '25 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat beer', owner: 'Khiew Shi Kai', attendees: ['Cruz']},
-        {id: 2, title: 'Super Secret Stuff', description: 'Discuss behind closed doors.', date: '26 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat kopi', owner: 'Khiew Shi Kai', attendees: ['Izzuddin', 'Cruz']},
-        {id: 3, title: 'Food Food Food', description: 'Grab an awesome meal together!', date: '27 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat Meal', owner: 'Khiew Shi Kai', attendees: ['Izzuddin']}
-    ];
+//    var events = [
+//        {id: 0, title: 'Mobile Pervasive Meeting', description: 'Meet up and develop the next cool idea!', date: '24 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat kopi', owner: 'Khiew Shi Kai', attendees: ['Izzuddin', 'Brindha', 'Cruz']},
+//        {id: 1, title: 'Para Para Dance Meeting', description: 'Time to dance, dance, dance.', date: '25 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat beer', owner: 'Khiew Shi Kai', attendees: ['Cruz']},
+//        {id: 2, title: 'Super Secret Stuff', description: 'Discuss behind closed doors.', date: '26 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat kopi', owner: 'Khiew Shi Kai', attendees: ['Izzuddin', 'Cruz']},
+//        {id: 3, title: 'Food Food Food', description: 'Grab an awesome meal together!', date: '27 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat Meal', owner: 'Khiew Shi Kai', attendees: ['Izzuddin']}
+//    ];
+
+    var firebaseRef = new Firebase("https://smu-pop.firebaseio.com/events");
+    var sync = $firebase(firebaseRef);
+    var allEventsArray = sync.$asArray();
 
 
     return {
-        all: function () {
-            return events;
+        allEvents: function () {
+            return allEventsArray;
         },
-        get: function (eventId) {
+        getEvent: function (eventId) {
             // Simple index lookup
-            return events[eventId];
+            return allEventsArray[eventId];
+        },
+        addEvent: function (eventObj) {
+            sync.$push(eventObj);
         }
     };
-})
+});
 
 myApp.factory('ProfileService', function () {
     // Might use a resource here that returns a JSON array

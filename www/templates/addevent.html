@@ -2,7 +2,7 @@
     <div class="bar bar-header navbar-color topRounded">
         <button class="button button-icon icon ion-arrow-left-c white" onclick="window.location = '#/home'"></button>
         <h1 class="title white">Add Event</h1>
-        <button class="button button-icon icon ion-checkmark white" ng-click="testPlaces()"></button>
+        <button class="button button-icon icon ion-checkmark white" ng-click="addEvent()"></button>
     </div>
     <ion-content padding="true" class="contentContainer">
 
@@ -14,16 +14,17 @@
             <div class="item item-divider">
                 Details
             </div>
-            <label class="item item-input item-floating-label">
-                <span class="input-label">Title</span>
+            <label class="item item-input">
+                <!--<span class="input-label">Title</span>-->
                 <input name='title' type="text" placeholder="Title" ng-model="model.title">
             </label>
-            <label class="item item-input item-floating-label">
-                <span class="input-label">Venue</span>
-                <!--<ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" />-->
+            <label class="item item-input">
+                <!--<span class="input-label">Venue</span>-->
+                <!--<ion-google-place placeholder="Venue" ng-model="model.venue" />-->
                 <!--<input name='venue' type="text" placeholder="Venue" ng-model="model.venue">-->
                 <!--<input type="text" id="autocomplete" class="form-control" ng-autocomplete ng-model="model.venue" />-->
                 <input type="text" placeholder="Venue" ng-model="model.venue" googleplace="" class="ng-pristine ng-valid" autocomplete="on"> 
+                <!--<i class="icon ion-close-circled appRed" ng-if="!(model.venue)"></i>-->
             </label>
 
             <label class="item item-input item-floating-label">

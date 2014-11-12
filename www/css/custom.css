@@ -66,6 +66,10 @@ ion-content {
     text-align: right;
 }
 
+.appRed {
+    color: #ef4756;
+}
+
 /* login and signup page */
 .logo {
     width: 100%;
@@ -127,8 +131,48 @@ ion-content {
     margin-left: auto;
     margin-right: auto;
 }
-
 /*login and signup page ends*/
+
+/* add event */
+// for google places autocomplete
+.pac-container {
+    z-index: 9999;
+}
+
+.pac-item {
+    height: 40px;
+}
+
+.pac-item-query {
+    font-size: 14px;
+}
+
+.btnHeight {
+    height: 60px;
+}
+
+.addMemberList {
+    padding-top: 43px;
+    height: 100%;
+}
+
+.right-checkbox {
+    float:right;
+    display:inline;
+}
+
+.avatar-name {
+    display:inline;
+    float: left;
+}
+
+.username {
+    display:inline;
+    float: left;
+}
+
+/* end add events */
+
 
 .profilePanel {
     border: 1px solid #ddd;
@@ -314,32 +358,4 @@ ion-content {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-}
-
-.appRed {
-    color: #ef4756;
-}
-
-.btnHeight {
-    height: 60px;
-}
-
-.addMemberList {
-    padding-top: 43px;
-    height: 100%;
-}
-
-.right-checkbox {
-    float:right;
-    display:inline;
-}
-
-.avatar-name {
-    display:inline;
-    float: left;
-}
-
-.username {
-    display:inline;
-    float: left;
 }

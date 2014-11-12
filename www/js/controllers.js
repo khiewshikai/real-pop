@@ -20,23 +20,24 @@ myApp.directive('googleplace', function() {
     };
 });
 
-myApp.directive('disableTap', function($timeout) {
-  return {
-    link: function() {
-      $timeout(function() {
-        // Find google places div
-        _.findIndex(angular.element(document.querySelectorAll('.pac-container')), function(container) {
-          // disable ionic data tab
-          container.setAttribute('data-tap-disabled', 'true');
-          // leave input field if google-address-entry is selected
-          container.onclick = function() {
-            document.getElementById('autocomplete').blur();
-          };
-        });
-      },500);
-    }
-  };
-});
+//myApp.directive('disabletap', function($timeout) {
+//  return {
+//    link: function() {
+//      $timeout(function() {
+//        container = document.getElementsByClassName('pac-container');
+//        // disable ionic data tab
+//        angular.element(container).attr('data-tap-disabled', 'true');
+//        // leave input field if google-address-entry is selected
+//        angular.element(container).on("click", function(){
+//            document.getElementById('type-selector').blur();
+//        });
+//
+//      },500);
+//
+//    }
+//  };
+//});
+
 
 // login and sign up controller
 myApp.controller("LoginCtrl", function ($scope, MasterDataService, $cordovaToast) {
@@ -152,7 +153,7 @@ myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaT
     };
 });
 
-myApp.controller("AddEventCtrl", function ($scope, MasterDataService, RankingService, $ionicModal, $cordovaToast, $http) {
+myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventService, RankingService, $ionicModal, $cordovaToast) {
     // initialise a model object to bind input form
     $scope.model = {};
     
@@ -235,6 +236,32 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, RankingSer
             $cordovaToast.show("Please complete all the fields", 'short', 'center');
             return;
         }
+        if ($scope.addedMembersList.length == 1) {
+            console.log("Please invite your friends");
+            $cordovaToast.show("Please invite your friends", 'short', 'center');
+            return;
+        }
+        
+        // get all the email from the member list
+        var membersEmail = [];
+        for(var i = 0; i < $scope.addedMembersList.length; i++) {
+            membersEmail.push($scope.addedMembersList[i].email);
+        }
+        
+        // create the event object
+        var eventObj = {
+            "id":  $scope.loggedInUser.$id + new Date().getTime(),
+            "title": $scope.model.title,
+            "venue": $scope.model.venue,
+            "startTime": Date.parse($scope.model.date + " " + $scope.model.start),
+            "endTime": Date.parse($scope.model.date + " " + $scope.model.end),
+            "attendees": membersEmail
+        };
+        
+        console.log(eventObj.id);
+        MasterDataService.addFriend(eventObj.id);
+//        EventService.addEvent(eventObj);
+        console.log(eventObj);
     };
     
     // helper class -----------------------------------
@@ -309,7 +336,7 @@ myApp.controller('EventIndexCtrl', function ($scope, EventService, MasterDataSer
     console.log(MasterDataService.getLoggedInUser());
 
     // get events from service
-    $scope.events = EventService.all();
+//    $scope.events = EventService.all();
 
 
 
@@ -338,7 +365,7 @@ myApp.controller('EventIndexCtrl', function ($scope, EventService, MasterDataSer
 // A simple controller that shows a tapped item's data
 myApp.controller('EventDetailCtrl', function ($scope, $stateParams, EventService) {
     // "Pets" is a service returning mock data (services.js)
-    $scope.event = EventService.get($stateParams.eventId);
+//    $scope.event = EventService.get($stateParams.eventId);
 });
 
 // A simple controller that fetches a list of data from a service
