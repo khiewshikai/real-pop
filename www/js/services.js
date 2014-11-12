@@ -87,7 +87,7 @@ myApp.factory('MasterDataService', function ($firebase) {
 
 myApp.factory('RankingService', function () {
     return {
-        getAvartar: function (points) {
+        getAvatar: function (points) {
             if (points <= -50) {
                 return "img/Forever-Late.png";
             }

@@ -5,16 +5,24 @@
         <h1 class="title white" onclick="window.location = '#/home'">PoP</h1>
         <button class="button button-icon icon ion-ios7-person white"></button>
     </div>
-    <ion-content padding="true" class="contentContainer">
-        
+    <ion-content class="contentContainer">
+        <div class="profilePanel">
+            <div class="profileAvatar"><img src='img/Supreme Punctual Rajesh.png' alt=""/></div>
+            <div class="profileDetails">
+                <div class="profileName">{{loggedInUser.name}}</div>
+                <div class="profileRank">{{getRankName(loggedInUser.points)}}</div>
+            </div>
+            <div class="profileMore"><i class="icon ion-more icon-rotate90"></i></div>
+            <div class="profilePoints">{{loggedInUser.points}}</div>
+        </div>
         <div class="rankingList">
             <div class="listItem" ng-repeat="friend in friendsList track by $index">
                 <div class="rank">{{rankList[$index]}}</div>
-                <div class="avatar"><img src='{{avartarList[$index]}}' alt=""/></div>
+                <div class="avatar"><img src='{{getAvatar(friend.points)}}' alt=""/></div>
                 <div class="details">
-                    <div class="name you" ng-if="friend.name == loggedInUser.name">You</div>
+                    <div class="name appRed" ng-if="friend.name == loggedInUser.name">You</div>
                     <div class="name" ng-if="friend.name != loggedInUser.name">{{friend.name}}</div>
-                    <div class="email">{{rankNameList[$index]}}</div>
+                    <div class="email">{{getRankName(friend.points)}}</div>
                 </div>
                 <div class="points">{{friend.points}}</div>
                 <div class="pp">
