@@ -372,10 +372,22 @@ ion-content {
 }
 
 /* Event details */
+.penaltyImg {
+    margin-top: -2px;
+}
+
+.marginTop {
+    margin-top: 15px;
+}
+
 .labelSpan {
     width: 90px;
     float: left;
     display: inline-block;
     font-weight: 700;
     font-size: 14px;
+}
+
+.orange {
+    color: #e67e22;
 }

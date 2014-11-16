@@ -147,6 +147,17 @@ myApp.factory('RankingService', function () {
     };
 });
 
+myApp.factory('PenaltyService', function () {
+    var penaltyList = ['treat', 'pay up', 'perform', 'GSR booker', 'custom'];
+
+    return {
+        getPenaltyList: function () {
+            return penaltyList;
+        }
+    };
+});
+
+
 
 myApp.factory('EventService', function ($firebase) {
 

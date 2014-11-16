@@ -40,6 +40,16 @@
                 <span class="input-label">End Time</span>
                 <input name='end' placeholder="--:--" type="time" ng-model="model.end">
             </label>
+            
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Penalty
+                </div>
+                <select>
+                    <option ng-repeat="p in penaltyList track by $index">{{p}}</option>
+                </select>
+            </label>
+
         </div>
 
         <div class="list">

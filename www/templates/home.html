@@ -22,7 +22,7 @@
             <!--<button class="col  button button-clear" onclick="window.location = '#/location'">Location</button>-->
             <div class="item" ng-repeat="event in eventsList" type="item-text-wrap" ng-click="viewEvent('#/event/'+event.id)">
                 <span class="item-note arrived">
-                               {{countArrived(event.attendees)}}
+                               
                             </span>
                 <h2>{{event.title}}</h2>
                 <span class="item-note totalMembers">

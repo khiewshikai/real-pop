@@ -155,7 +155,7 @@ myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaT
     };
 });
 
-myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventService, RankingService, $ionicModal, $cordovaToast) {
+myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventService, RankingService, $ionicModal, $cordovaToast, PenaltyService) {
     // initialise a model object to bind input form
     $scope.model = {};
 
@@ -168,6 +168,8 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
     $scope.userRank = RankingService.getRank($scope.loggedInUser.points);
 
     $scope.addedMembersList = [$scope.loggedInUser];
+        
+    $scope.penaltyList = PenaltyService.getPenaltyList();
 
     // get all the friends of this user
     $scope.friendsList = [];
@@ -402,7 +404,7 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService) 
     // end helper class -----------------------------------
 });
 
-myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataService, EventService, RankingService) {
+myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataService, EventService, RankingService, PenaltyService) {
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
     console.log($scope.loggedInUser);
 
