@@ -134,6 +134,17 @@ ion-content {
 /*login and signup page ends*/
 
 /* add event */
+.arrived {
+    font-weight: 700;
+    font-size: 16px;
+    color: #48CFAD;
+}
+
+.totalMembers {
+    border-top: 1px solid #ddd;
+}
+
+
 // for google places autocomplete
 .pac-container {
     z-index: 9999;
@@ -358,4 +369,13 @@ ion-content {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+/* Event details */
+.labelSpan {
+    width: 90px;
+    float: left;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 14px;
 }

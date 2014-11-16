@@ -29,7 +29,7 @@
 
             <label class="item item-input item-floating-label">
                 <span class="input-label">Date</span>
-                <input name='date' placeholder="mm-dd-yy" type="text" onfocus="(this.type='date')" ng-model="model.date">
+                <input name='date' placeholder="mm/dd/yyyy" type="text" onfocus="(this.type='date')" ng-model="model.date">
             </label>
             <label class="item item-input item-floating-label">
                 <span class="input-label">Start Time</span>
@@ -49,8 +49,8 @@
 
             <div class="item item-avatar item-icon-right" ng-repeat="member in addedMembersList track by $index">
                 <img src="{{getAvatar(member.points)}}">
-                <h2 class="appRed" ng-if="member == loggedInUser">You</h2>
-                <h2 ng-if="member != loggedInUser">{{member.name}}</h2>
+                <h2 class="appRed" ng-if="member.email == loggedInUser.email">You</h2>
+                <h2 ng-if="member.email != loggedInUser.email">{{member.name}}</h2>
                 <h6 class="greyText">{{getRankName(member.points)}}</h6>
                 <i class="icon ion-close-circled appRed" ng-if="member != loggedInUser" ng-click="removeMember($index)"></i>
             </div>

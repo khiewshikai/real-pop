@@ -1,19 +1,19 @@
 var myApp = angular.module('starter.controllers', ['firebase', 'angular-datepicker']);
 
 // directive for google Place
-myApp.directive('googleplace', function() {
+myApp.directive('googleplace', function () {
     return {
         require: 'ngModel',
-        link: function(scope, element, attrs, model) {
+        link: function (scope, element, attrs, model) {
             var options = {
                 types: [],
                 componentRestrictions: {}
             };
             scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
- 
-            google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
-                scope.$apply(function() {
-                    model.$setViewValue(element.val());                
+
+            google.maps.event.addListener(scope.gPlace, 'place_changed', function () {
+                scope.$apply(function () {
+                    model.$setViewValue(element.val());
                 });
             });
         }
@@ -158,7 +158,7 @@ myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaT
 myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventService, RankingService, $ionicModal, $cordovaToast) {
     // initialise a model object to bind input form
     $scope.model = {};
-    
+
     // initialise google place
     $scope.gPlace;
 
@@ -243,30 +243,34 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
             $cordovaToast.show("Please invite your friends", 'short', 'center');
             return;
         }
-        
+
         // get all the email from the member list
-        var membersEmail = [];
-        for(var i = 0; i < $scope.addedMembersList.length; i++) {
-            membersEmail.push($scope.addedMembersList[i].email);
+        var attendeesList = [];
+        for (var i = 0; i < $scope.addedMembersList.length; i++) {
+            var mObj = {
+                "email": $scope.addedMembersList[i].email,
+                "status": "r"
+            }
+            attendeesList.push(mObj);
         }
-        
+
         // create the event object
         var eventObj = {
-            "id":  $scope.loggedInUser.$id + new Date().getTime(),
+            "id": $scope.loggedInUser.$id + new Date().getTime(),
             "title": $scope.model.title,
             "venue": $scope.model.venue,
             "startTime": Date.parse($scope.model.date + " " + $scope.model.start),
             "endTime": Date.parse($scope.model.date + " " + $scope.model.end),
-            "attendees": membersEmail
+            "attendees": attendeesList
         };
-        
+
         // add event to all members
-        for(var i = 0; i < $scope.addedMembersList.length; i++) {
+        for (var i = 0; i < $scope.addedMembersList.length; i++) {
             MasterDataService.addEvent($scope.addedMembersList[i], eventObj.id);
         }
-        
+
         EventService.addEvent(eventObj);
-        
+
         $cordovaToast.show('Event added!', 'short', 'bottom').then(function (success) {
             setTimeout(function () {
                 window.location = '#/home';
@@ -275,7 +279,7 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
             console.log("The toast was not shown due to " + error);
         });
     };
-    
+
     // helper class -----------------------------------
     $scope.getRankName = function (points) {
         return RankingService.getRank(points);
@@ -346,11 +350,11 @@ myApp.controller("RankingCtrl", function ($scope, MasterDataService, RankingServ
 
 myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService) {
     console.log(MasterDataService.getLoggedInUser());
-    
+
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
 
     $scope.eventsList = [];
-    
+
     // get the events of this user
     var eventsIdList = MasterDataService.getEvents();
     for (var i = 0; i < eventsIdList.length; i++) {
@@ -358,43 +362,88 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService) 
         $scope.eventsList.push(eventObj);
     }
     console.log($scope.eventsList);
-    
+
+    // count the number of attendees who arrived
+    $scope.countArrived = function (attendeesList) {
+        var count = 0;
+        for (var i = 0; i < attendeesList.length; i++) {
+            var attendeeObj = attendeesList[i];
+            if (attendeeObj.status == 'g') {
+                count += 1;
+            }
+        }
+        return count;
+    };
+
+    // view event details
+    $scope.viewEvent = function (url) {
+        window.location = url;
+    };
+
 
     $scope.logout = function () {
         MasterDataService.logout();
 //        window.location = '#/login';
     };
+
+    // helper class -----------------------------------
+    $scope.convertTime = function (time) {
+        var date = new Date(time);
+        var dateStr = date.toLocaleTimeString();
+        return dateStr;
+    };
+    
+    $scope.convertDate = function (time) {
+        var date = new Date(time);
+        var dateStr = date.toDateString();
+        return dateStr;
+    };
+
+    // end helper class -----------------------------------
 });
 
+myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataService, EventService, RankingService) {
+    $scope.loggedInUser = MasterDataService.getLoggedInUser();
+    console.log($scope.loggedInUser);
 
-//// A simple controller that shows a tapped item's data
-//myApp.controller('EventIndexCtrl', function($scope, EventService, $ionicModal) {
-//  // "Pets" is a service returning mock data (services.js)
-//  $scope.events = EventService.all();
-//  $ionicModal.fromTemplateUrl('modal.html', function($ionicModal) {
-//        $scope.modal = $ionicModal;
-//    }, {
-//        // Use our scope for the scope of the modal to keep it simple
-//        scope: $scope,
-//        // The animation we want to use for the modal entrance
-//        animation: 'slide-in-up'
-//    });  
-//})
+    $scope.event = EventService.getEvent($stateParams.eventId);
 
+    $scope.attendeesList = [];
 
-// A simple controller that shows a tapped item's data
-myApp.controller('EventDetailCtrl', function ($scope, $stateParams, EventService) {
-    // "Pets" is a service returning mock data (services.js)
-//    $scope.event = EventService.get($stateParams.eventId);
+    for (var i = 0; i < $scope.event.attendees.length; i++) {
+        var attendeeObj = MasterDataService.getUser($scope.event.attendees[i].email);
+        $scope.attendeesList.push(attendeeObj);
+    }
+
+    // helper class -----------------------------------
+    $scope.getRankName = function (points) {
+        return RankingService.getRank(points);
+    };
+
+    $scope.getAvatar = function (points) {
+        return RankingService.getAvatar(points);
+    };
+    
+    $scope.convertTime = function (time) {
+        var date = new Date(time);
+        var dateStr = date.toLocaleTimeString();
+        return dateStr;
+    };
+    
+    $scope.convertDate = function (time) {
+        var date = new Date(time);
+        var dateStr = date.toDateString();
+        return dateStr;
+    };
+    // end helper class -----------------------------------
 });
 
-// A simple controller that fetches a list of data from a service
 myApp.controller('ProfileIndexCtrl', function ($scope, ProfileService, $ionicModal) {
     $rootScope.loginUser
 });
 
 myApp.controller('ProfileDetailCtrl', function ($scope, $stateParams, ProfileService) {
-    // "Pets" is a service returning mock data (services.js)
+
     $scope.profile = ProfileService.get($stateParams.profileId);
 });
 

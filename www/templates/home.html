@@ -20,10 +20,18 @@
                 <button class="col  button button-clear" onclick="window.location = '#/addfriend'">Add Friend</button>
             </div>
             <!--<button class="col  button button-clear" onclick="window.location = '#/location'">Location</button>-->
-            <ion-item ng-repeat="event in eventsList" type="item-text-wrap" href="#/event/{{event.id}}">
-                <h3>{{event.title}}</h3>
-                <p>{{event.description}}</p>
-            </ion-item>
+            <div class="item" ng-repeat="event in eventsList" type="item-text-wrap" ng-click="viewEvent('#/event/'+event.id)">
+                <span class="item-note arrived">
+                               {{countArrived(event.attendees)}}
+                            </span>
+                <h2>{{event.title}}</h2>
+                <span class="item-note totalMembers">
+                                {{event.attendees.length}}
+                            </span>
+                <div><p>{{event.venue}}</p></div>
+                <div><p>{{convertDate(event.startTime)}}, {{convertTime(event.startTime)}} - {{convertTime(event.endTime)}}</p></div>
+                
+            </div>
 
         </ion-list>
 

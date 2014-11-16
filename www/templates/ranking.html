@@ -20,8 +20,8 @@
                 <div class="rank">{{rankList[$index]}}</div>
                 <div class="avatar"><img src='{{getAvatar(friend.points)}}' alt=""/></div>
                 <div class="details">
-                    <div class="name appRed" ng-if="friend.name == loggedInUser.name">You</div>
-                    <div class="name" ng-if="friend.name != loggedInUser.name">{{friend.name}}</div>
+                    <div class="name appRed" ng-if="friend.email == loggedInUser.email">You</div>
+                    <div class="name" ng-if="friend.email != loggedInUser.email">{{friend.name}}</div>
                     <div class="email">{{getRankName(friend.points)}}</div>
                 </div>
                 <div class="points">{{friend.points}}</div>

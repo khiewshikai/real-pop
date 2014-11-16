@@ -1,56 +1,53 @@
-<ion-view title="{{event.title}}">
-    <ion-nav-buttons side="right">
-        <button class="button-icon button-clear" onclick="window.location = '#/home'"><i class="icon white ion-edit"></i></button>
-    </ion-nav-buttons>
-    <ion-content padding="true">
-       
+<ion-view class="blackbg">
+    <div class="bar bar-header navbar-color topRounded">
+        <button class="button button-icon icon ion-arrow-left-c white" onclick="window.location = '#/home'"></button>
+        <h1 class="title white">{{event.title}}</h1>
+        <button class="button button-icon icon ion-checkmark white" ng-click=""></button>
+    </div>
+
+    <ion-content padding="true" class="contentContainer">
         <div>
             <img src="img/coffee.jpg" height="200" width="100%">
         </div>
-       
+
         <div class="list">
-            <div class="item item-text-wrap">
-            When: {{event.date}}, {{event.timeStart}} - {{event.timeEnd}}
-            <br/>
-            Venue: {{event.venue}}
-            <hr>
-            <h3>Penalty: {{event.penalty}}</h3>
-            
-            </div>
             <div class="item item-divider">
-            Attendees
-            <span class="badge badge-assertive">1/{{event.attendees.length + 1}}
-            </span>
+                Penalty
+                </span>
             </div>
             
-            <a class="item item-avatar" href="#">
-                <img src="venkman.jpg">
-                <h2><img src="../img/onlineicon.png" position="right">{{event.owner}}</h2>
-            </a> 
-
-            <div ng-repeat="attendee in event.attendees">
-                <a class="item item-avatar item-icon-right" href="#">
-                <img src="venkman.jpg">             
-                
-                <h2><img src="../img/offlineicon.png" position="right">{{attendee}}
-                </h2>
-                
-                </a>
-
-                
-
+            <div class="item item-text-wrap">
+                xxxx
+            </div>
+            
+            <div class="item item-text-wrap">
+                <div class="labelSpan">Date</div> {{convertDate(event.startTime)}}
+            </div>
+            <div class="item item-text-wrap">
+                <div class="labelSpan">Start Time</div> {{convertTime(event.startTime)}}
+            </div>
+            <div class="item item-text-wrap">
+                <div class="labelSpan">End Time</div> {{convertTime(event.endTime)}}
             </div>
         </div>            
-            
-            
 
-                
+        <div class="list">
+            <div class="item item-divider">
+                Who is going?
+                <span class="badge badge-light">1/{{event.attendees.length}}
+                </span>
+            </div>
 
+            <div class="item item-avatar item-icon-right" ng-repeat="attendee in attendeesList track by $index">
+                <img src="{{getAvatar(attendee.points)}}">
+                <h2 class="appRed" ng-if="attendee.email == loggedInUser.email">You</h2>
+                <h2 ng-if="attendee.email != loggedInUser.email">{{attendee.name}}</h2>
+                <h6 class="greyText">{{getRankName(attendee.points)}}</h6>
+                <i class="icon ion-record" ng-class="{appRed: event.attendees[$index].status == 'r', balanced: event.attendees[$index].status == 'g', balanced: event.attendees[$index].status == 'o'}"></i>
+            </div>
 
-            
+        </div>
 
-           
-        
 
     </ion-content>
 </ion-view>
