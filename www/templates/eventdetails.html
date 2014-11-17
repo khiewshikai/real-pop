@@ -7,7 +7,7 @@
 
     <ion-content padding="true" class="contentContainer">
         <div class="penaltyImg">
-            <img src="img/treat penalty-02-05.png" height="auto" width="100%">
+            <img src="{{getPenImg(event.penaltyName)}}" height="auto" width="100%">
         </div>
 
         <div class="list marginTop">
@@ -16,7 +16,8 @@
             </div>
             
             <div class="item item-text-wrap">
-                xxxx
+                <h3>{{event.penaltyName}}</h3>
+                <p>{{event.penaltyRules}}</p>
             </div>
             
             <div class="item item-text-wrap">
@@ -45,7 +46,7 @@
                 <img src="{{getAvatar(attendee.points)}}">
                 <h2 class="appRed" ng-if="attendee.email == loggedInUser.email">You</h2>
                 <h2 ng-if="attendee.email != loggedInUser.email">{{attendee.name}}</h2>
-                <h6 class="greyText">{{getRankName(attendee.points)}}</h6>
+                <h6 class="greyText">{{event.attendees[$index]}}</h6>
                 <i class="icon ion-record" ng-class="{appRed: event.attendees[$index].status == 'r', balanced: event.attendees[$index].status == 'g', orange: event.attendees[$index].status == 'o'}"></i>
             </div>
 

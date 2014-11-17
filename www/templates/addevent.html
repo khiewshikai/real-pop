@@ -45,9 +45,23 @@
                 <div class="input-label">
                     Penalty
                 </div>
-                <select>
+                <select ng-model="model.penalty">
                     <option ng-repeat="p in penaltyList track by $index">{{p}}</option>
                 </select>
+            </label>
+            
+            <label class="item" ng-if="model.penalty && model.penalty != 'custom'">
+                {{getDesc(model.penalty)}}
+            </label>
+            
+            <label class="item item-input item-floating-label" ng-if="model.penalty && model.penalty == 'custom'">
+                <span class="input-label">Penalty Name</span>
+                <input name='penaltyName' type="text" ng-model="model.penaltyName">
+            </label>
+            
+            <label class="item item-input item-floating-label" ng-if="model.penalty && model.penalty == 'custom'">
+                <span class="input-label">Penalty Rules</span>
+                <input name='penaltyRules' type="text" ng-model="model.penaltyRules">
             </label>
 
         </div>

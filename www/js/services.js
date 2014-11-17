@@ -100,7 +100,7 @@ myApp.factory('MasterDataService', function ($firebase) {
             allUsersArray.$save(member);
         },
         removeEvent: function (event) {
-            for(var i = 0; i < loggedInUser.events.length; i++) {
+            for (var i = 0; i < loggedInUser.events.length; i++) {
                 if (loggedInUser.events[i] == event.id) {
                     loggedInUser.events.splice(i, 1);
                 }
@@ -163,6 +163,48 @@ myApp.factory('PenaltyService', function () {
     return {
         getPenaltyList: function () {
             return penaltyList;
+        },
+        getDesc: function (name) {
+            var desc = "";
+            switch (name) {
+                case 'treat':
+                    desc = "this is treat desc";
+                    break;
+                case 'pay up':
+                    desc = "this is pay up desc";
+                    break;
+                case 'perform':
+                    desc = "this is perform desc";
+                    break;
+                case 'GSR booker':
+                    desc = "this is GSR booker desc";
+                    break;
+                default:
+                    desc = "";
+                    break;
+            }
+            return desc;
+        },
+        getPenImg: function (name) {
+            var url = "";
+            switch (name) {
+                case 'treat':
+                    url = "img/treat penalty-02-01.png";
+                    break;
+                case 'pay up':
+                    url = "img/treat penalty-02-02.png";
+                    break;
+                case 'perform':
+                    url = "img/treat penalty-02-03.png";
+                    break;
+                case 'GSR booker':
+                    url = "img/treat penalty-02-04.png";
+                    break;
+                default:
+                    url = "img/treat penalty-02-05.png";
+                    break;
+            }
+            return url;
         }
     };
 });
@@ -170,7 +212,7 @@ myApp.factory('PenaltyService', function () {
 
 
 myApp.factory('EventService', function ($firebase) {
-    
+
     // Might use a resource here that returns a JSON array
 
     // Some fake testing data
@@ -205,7 +247,7 @@ myApp.factory('EventService', function ($firebase) {
         },
         removeAttendee: function (eventId, userId) {
             var eventObj = {};
-            
+
             for (var i = 0; i < allEventsArray.length; i++) {
                 eventObj = allEventsArray[i];
                 // account exist
@@ -215,7 +257,7 @@ myApp.factory('EventService', function ($firebase) {
                         var attendeeObj = eventObj.attendees[j];
                         if (attendeeObj.email == userId) {
                             console.log("remove attendee");
-                            eventObj.attendees.splice(j,1);
+                            eventObj.attendees.splice(j, 1);
                         }
                     }
                 }
@@ -225,7 +267,7 @@ myApp.factory('EventService', function ($firebase) {
         updateAttendance: function (eventId, userId, status) {
             console.log("update status");
             var eventObj = {};
-            
+
             for (var i = 0; i < allEventsArray.length; i++) {
                 eventObj = allEventsArray[i];
                 // account exist

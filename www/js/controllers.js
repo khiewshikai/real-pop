@@ -242,7 +242,9 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
     };
 
     $scope.addEvent = function () {
-        if (!$scope.model.title || !$scope.model.venue || !$scope.model.date || !$scope.model.start || !$scope.model.end) {
+        console.log($scope.model.penalty);
+
+        if (!$scope.model.title || !$scope.model.venue || !$scope.model.date || !$scope.model.start || !$scope.model.end || !$scope.model.penalty) {
             console.log("Please complete all the fields");
             $cordovaToast.show("Please complete all the fields", 'short', 'center');
             return;
@@ -290,6 +292,16 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
             $scope.venueLat = venueLat;
             $scope.venueLng = venueLng;
 
+            var penaltyName = $scope.model.penalty;
+            if ($scope.model.penaltyName) {
+                penaltyName = $scope.model.penaltyName;
+            }
+
+            var penaltyRules = PenaltyService.getDesc(penaltyName);
+            if ($scope.model.penaltyRules) {
+                penaltyRules = $scope.model.penaltyRules;
+            }
+
             // create the event object
             var eventObj = {
                 "id": $scope.loggedInUser.$id + new Date().getTime(),
@@ -299,7 +311,9 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
                 "venueLng": $scope.venueLng,
                 "startTime": Date.parse($scope.model.date + " " + $scope.model.start),
                 "endTime": Date.parse($scope.model.date + " " + $scope.model.end),
-                "attendees": attendeesList
+                "attendees": attendeesList,
+                "penaltyName": penaltyName,
+                "penaltyRules": penaltyRules
             };
 
             // add event to all members
@@ -327,6 +341,10 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
     };
 
     // helper class -----------------------------------
+    $scope.getDesc = function (name) {
+        return PenaltyService.getDesc(name);
+    };
+
     $scope.getRankName = function (points) {
         return RankingService.getRank(points);
     };
@@ -400,7 +418,7 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
 
     $scope.eventsList = [];
-    
+
     // get the events of this user
     var eventsIdList = MasterDataService.getEvents();
     for (var i = 0; i < eventsIdList.length; i++) {
@@ -435,17 +453,21 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
 //        window.location = '#/login';
     };
 
-    // see if user has arrived...
-    var checkLoc = function () {
-        var deferred = $q.defer();
-        console.log($scope.eventsList[0]);
-        var arrived = retrieveUserCurrentCoord($scope.eventsList[0].venueLat, $scope.eventsList[0].venueLng);
-        deferred.resolve(arrived);
-        return deferred.promise;
-    };
+    // have events, watch first event location
+    if ($scope.eventsList.length != 0) {
+        // see if user has arrived...
+        var checkLoc = function () {
+            var deferred = $q.defer();
+            console.log($scope.eventsList[0]);
+            var arrived = retrieveUserCurrentCoord($scope.eventsList[0].venueLat, $scope.eventsList[0].venueLng);
+            deferred.resolve(arrived);
+            return deferred.promise;
+        };
 
-    if (checkLoc) {
-        EventService.updateAttendance($scope.eventsList[0].id, $scope.loggedInUser.email, 'g');
+        if (checkLoc) {
+            EventService.updateAttendance($scope.eventsList[0].id, $scope.loggedInUser.email, 'g');
+        }
+
     }
 
     // helper class -----------------------------------
@@ -469,6 +491,7 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataSe
     console.log($scope.loggedInUser);
 
     $scope.event = EventService.getEvent($stateParams.eventId);
+    console.log($scope.event);
 
     $scope.attendeesList = [];
 
@@ -516,6 +539,10 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataSe
         var date = new Date(time);
         var dateStr = date.toDateString();
         return dateStr;
+    };
+    
+    $scope.getPenImg = function (name) {
+        return PenaltyService.getPenImg(name);
     };
     // end helper class -----------------------------------
 });
