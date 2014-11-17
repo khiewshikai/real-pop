@@ -81,7 +81,7 @@ myApp.controller("LoginCtrl", function ($scope, MasterDataService, $cordovaToast
             $cordovaToast.show('Passwords do not match', 'short', 'bottom');
             return;
         }
-        if (MasterDataService.getUser($scope.model.newEmail)) {
+        if (MasterDataService.getUser($scope.model.newEmail).email) {
             console.log('Account exists');
             $cordovaToast.show('Account exists', 'short', 'bottom');
             return;
@@ -122,6 +122,9 @@ myApp.controller("LoginCtrl", function ($scope, MasterDataService, $cordovaToast
 });
 
 myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaToast) {
+    // current user
+    $scope.loggedInUser = MasterDataService.getLoggedInUser();
+
     // initialise a model object to bind input form
     $scope.model = {};
 
@@ -143,7 +146,11 @@ myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaT
             return;
         }
         // add in database
-        MasterDataService.addFriend($scope.model.friendEmail);
+        MasterDataService.addFriend($scope.loggedInUser, $scope.model.friendEmail);
+
+        // add friend at the other side
+        var friendObj = MasterDataService.getUser($scope.model.friendEmail);
+        MasterDataService.addFriend(friendObj, $scope.loggedInUser.email);
 
         $cordovaToast.show('Friend added!', 'short', 'bottom').then(function (success) {
             setTimeout(function () {
@@ -155,7 +162,7 @@ myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaT
     };
 });
 
-myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventService, RankingService, $ionicModal, $cordovaToast, PenaltyService) {
+myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventService, RankingService, $ionicModal, $cordovaToast, PenaltyService, $http) {
     // initialise a model object to bind input form
     $scope.model = {};
 
@@ -168,7 +175,7 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
     $scope.userRank = RankingService.getRank($scope.loggedInUser.points);
 
     $scope.addedMembersList = [$scope.loggedInUser];
-        
+
     $scope.penaltyList = PenaltyService.getPenaltyList();
 
     // get all the friends of this user
@@ -240,6 +247,23 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
             $cordovaToast.show("Please complete all the fields", 'short', 'center');
             return;
         }
+
+        var currentDate = new Date();
+        var startTime = Date.parse($scope.model.date + " " + $scope.model.start);
+        var endTime = Date.parse($scope.model.date + " " + $scope.model.end);
+
+        if (startTime < currentDate) {
+            console.log("You cannot create an event in the past!");
+            $cordovaToast.show("You cannot create an event in the past!", 'short', 'center');
+            return;
+        }
+
+        if (endTime < startTime) {
+            console.log("Your event should not end before it starts!");
+            $cordovaToast.show("Your event should not end before it starts", 'short', 'center');
+            return;
+        }
+
         if ($scope.addedMembersList.length == 1) {
             console.log("Please invite your friends");
             $cordovaToast.show("Please invite your friends", 'short', 'center');
@@ -256,22 +280,42 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
             attendeesList.push(mObj);
         }
 
-        // create the event object
-        var eventObj = {
-            "id": $scope.loggedInUser.$id + new Date().getTime(),
-            "title": $scope.model.title,
-            "venue": $scope.model.venue,
-            "startTime": Date.parse($scope.model.date + " " + $scope.model.start),
-            "endTime": Date.parse($scope.model.date + " " + $scope.model.end),
-            "attendees": attendeesList
-        };
+        console.log($scope.model.venue);
+        $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + $scope.model.venue).then(function (resp) {
+            console.log('Success', resp);
+            var venueLat = resp.data.results[0].geometry.location.lat;
+            var venueLng = resp.data.results[0].geometry.location.lng;
+            console.log("Venue Lat: " + venueLat);
+            console.log("Venue Lng: " + venueLng);
+            $scope.venueLat = venueLat;
+            $scope.venueLng = venueLng;
 
-        // add event to all members
-        for (var i = 0; i < $scope.addedMembersList.length; i++) {
-            MasterDataService.addEvent($scope.addedMembersList[i], eventObj.id);
-        }
+            // create the event object
+            var eventObj = {
+                "id": $scope.loggedInUser.$id + new Date().getTime(),
+                "title": $scope.model.title,
+                "venue": $scope.model.venue,
+                "venueLat": $scope.venueLat,
+                "venueLng": $scope.venueLng,
+                "startTime": Date.parse($scope.model.date + " " + $scope.model.start),
+                "endTime": Date.parse($scope.model.date + " " + $scope.model.end),
+                "attendees": attendeesList
+            };
 
-        EventService.addEvent(eventObj);
+            // add event to all members
+            for (var i = 0; i < $scope.addedMembersList.length; i++) {
+                MasterDataService.addEvent($scope.addedMembersList[i], eventObj.id);
+            }
+
+            EventService.addEvent(eventObj);
+
+            // For JSON responses, resp.data contains the result
+        }, function (err) {
+            console.error('ERR', err);
+            //Add Toast
+
+            // err.status will contain the status code
+        })
 
         $cordovaToast.show('Event added!', 'short', 'bottom').then(function (success) {
             setTimeout(function () {
@@ -350,13 +394,13 @@ myApp.controller("RankingCtrl", function ($scope, MasterDataService, RankingServ
 });
 
 
-myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService) {
+myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, $q) {
     console.log(MasterDataService.getLoggedInUser());
 
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
 
     $scope.eventsList = [];
-
+    
     // get the events of this user
     var eventsIdList = MasterDataService.getEvents();
     for (var i = 0; i < eventsIdList.length; i++) {
@@ -364,6 +408,9 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService) 
         $scope.eventsList.push(eventObj);
     }
     console.log($scope.eventsList);
+    // sort by date
+    $scope.eventsList.sort(compareDate);
+
 
     // count the number of attendees who arrived
     $scope.countArrived = function (attendeesList) {
@@ -388,13 +435,26 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService) 
 //        window.location = '#/login';
     };
 
+    // see if user has arrived...
+    var checkLoc = function () {
+        var deferred = $q.defer();
+        console.log($scope.eventsList[0]);
+        var arrived = retrieveUserCurrentCoord($scope.eventsList[0].venueLat, $scope.eventsList[0].venueLng);
+        deferred.resolve(arrived);
+        return deferred.promise;
+    };
+
+    if (checkLoc) {
+        EventService.updateAttendance($scope.eventsList[0].id, $scope.loggedInUser.email, 'g');
+    }
+
     // helper class -----------------------------------
     $scope.convertTime = function (time) {
         var date = new Date(time);
         var dateStr = date.toLocaleTimeString();
         return dateStr;
     };
-    
+
     $scope.convertDate = function (time) {
         var date = new Date(time);
         var dateStr = date.toDateString();
@@ -404,7 +464,7 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService) 
     // end helper class -----------------------------------
 });
 
-myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataService, EventService, RankingService, PenaltyService) {
+myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataService, EventService, RankingService, PenaltyService, $ionicPopup) {
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
     console.log($scope.loggedInUser);
 
@@ -417,6 +477,26 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataSe
         $scope.attendeesList.push(attendeeObj);
     }
 
+
+    // A confirm dialog
+    $scope.showConfirm = function (event) {
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Leave Event',
+            template: 'Are you sure you want to leave this event?'
+        });
+        confirmPopup.then(function (res) {
+            if (res) {
+                // confirm leave event
+                console.log('You are sure');
+                MasterDataService.removeEvent(event);
+
+                EventService.removeAttendee(event.id, $scope.loggedInUser.email);
+            } else {
+                console.log('You are not sure');
+            }
+        });
+    };
+
     // helper class -----------------------------------
     $scope.getRankName = function (points) {
         return RankingService.getRank(points);
@@ -425,13 +505,13 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataSe
     $scope.getAvatar = function (points) {
         return RankingService.getAvatar(points);
     };
-    
+
     $scope.convertTime = function (time) {
         var date = new Date(time);
         var dateStr = date.toLocaleTimeString();
         return dateStr;
     };
-    
+
     $scope.convertDate = function (time) {
         var date = new Date(time);
         var dateStr = date.toDateString();
@@ -495,6 +575,8 @@ myApp.controller('locationCtrl', function ($scope, $ionicLoading) {
 
 });
 
+
+// helper classes
 function comparePoints(a, b) {
     if (a.points > b.points) {
         return -1;
@@ -512,4 +594,49 @@ function comparePoints(a, b) {
 }
 ;
 
+function compareDate(a, b) {
+    if (a.startTime < b.startTime) {
+        return -1;
+    } else if (a.startTime > b.startTime) {
+        return 1;
+    } else {
+        if (a.endTime > b.endTime) {
+            return -1;
+        } else if (a.endTime < b.endTime) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
+;
+
+function retrieveUserCurrentCoord(eventX, eventY) {
+    var positions = [];
+
+    navigator.geolocation.getCurrentPosition(function (position) {
+        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        positions.push({lat: pos.k, lng: pos.B});
+        console.log("lat: " + pos.k + ", lng: " + pos.B);
+
+        return checkCoordDifference(pos.k, pos.B, eventX, eventY);
+    });
+
+    //return positions;
+}
+
+function checkCoordDifference(userX, userY, eventX, eventY) {
+    var arriveLocation = false;
+
+    var firstLatLng = new google.maps.LatLng(userX, userY);
+    var secondLatLng = new google.maps.LatLng(eventX, eventY);
+    var distance = google.maps.geometry.spherical.computeDistanceBetween(firstLatLng, secondLatLng);
+    console.log(distance);
+
+    if (distance <= 100) {
+        arriveLocation = true;
+    }
+    console.log(arriveLocation);
+    return arriveLocation;
+}
         

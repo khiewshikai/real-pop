@@ -5,6 +5,7 @@ myApp.factory('MasterDataService', function ($firebase) {
     var sync = $firebase(firebaseRef);
     var allUsersArray = sync.$asArray();
 
+    console.log("Master Data loaded");
     // store the user logged in
     var loggedInUser = JSON.parse(window.localStorage['userSession'] || '{}');
 
@@ -67,15 +68,16 @@ myApp.factory('MasterDataService', function ($firebase) {
         resetCreateStatus: function () {
             createNewUserSuccess = "";
         },
-        addFriend: function (email) {
-            console.log(loggedInUser.$id);
-            console.log(allUsersArray.indexOf(loggedInUser));
-            if (loggedInUser.friends) {
-                loggedInUser.friends.push(email);
+        addFriend: function (user, email) {
+            console.log(email);
+            console.log(user.$id);
+            console.log(allUsersArray.indexOf(user));
+            if (user.friends) {
+                user.friends.push(email);
             } else {
-                loggedInUser.friends = [email];
+                user.friends = [email];
             }
-            allUsersArray.$save(loggedInUser);
+            allUsersArray.$save(user);
         },
         getFriends: function () {
             if (loggedInUser.friends) {
@@ -96,6 +98,14 @@ myApp.factory('MasterDataService', function ($firebase) {
                 member.events = [event];
             }
             allUsersArray.$save(member);
+        },
+        removeEvent: function (event) {
+            for(var i = 0; i < loggedInUser.events.length; i++) {
+                if (loggedInUser.events[i] == event.id) {
+                    loggedInUser.events.splice(i, 1);
+                }
+            }
+            allUsersArray.$save(loggedInUser);
         }
     };
 });
@@ -160,7 +170,7 @@ myApp.factory('PenaltyService', function () {
 
 
 myApp.factory('EventService', function ($firebase) {
-
+    
     // Might use a resource here that returns a JSON array
 
     // Some fake testing data
@@ -192,6 +202,44 @@ myApp.factory('EventService', function ($firebase) {
         },
         addEvent: function (eventObj) {
             sync.$push(eventObj);
+        },
+        removeAttendee: function (eventId, userId) {
+            var eventObj = {};
+            
+            for (var i = 0; i < allEventsArray.length; i++) {
+                eventObj = allEventsArray[i];
+                // account exist
+                if (eventId === eventObj.id) {
+                    // loop through the attendees of this event
+                    for (var j = 0; j < eventObj.attendees.length; j++) {
+                        var attendeeObj = eventObj.attendees[j];
+                        if (attendeeObj.email == userId) {
+                            console.log("remove attendee");
+                            eventObj.attendees.splice(j,1);
+                        }
+                    }
+                }
+            }
+            allEventsArray.$save(eventObj);
+        },
+        updateAttendance: function (eventId, userId, status) {
+            console.log("update status");
+            var eventObj = {};
+            
+            for (var i = 0; i < allEventsArray.length; i++) {
+                eventObj = allEventsArray[i];
+                // account exist
+                if (eventId === eventObj.id) {
+                    // loop through the attendees of this event
+                    for (var j = 0; j < eventObj.attendees.length; j++) {
+                        var attendeeObj = eventObj.attendees[j];
+                        if (attendeeObj.email == userId) {
+                            attendeeObj.status = 'g';
+                        }
+                    }
+                }
+            }
+            allEventsArray.$save(eventObj);
         }
     };
 });
