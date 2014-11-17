@@ -212,17 +212,6 @@ myApp.factory('PenaltyService', function () {
 
 
 myApp.factory('EventService', function ($firebase) {
-
-    // Might use a resource here that returns a JSON array
-
-    // Some fake testing data
-//    var events = [
-//        {id: 0, title: 'Mobile Pervasive Meeting', description: 'Meet up and develop the next cool idea!', date: '24 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat kopi', owner: 'Khiew Shi Kai', attendees: ['Izzuddin', 'Brindha', 'Cruz']},
-//        {id: 1, title: 'Para Para Dance Meeting', description: 'Time to dance, dance, dance.', date: '25 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat beer', owner: 'Khiew Shi Kai', attendees: ['Cruz']},
-//        {id: 2, title: 'Super Secret Stuff', description: 'Discuss behind closed doors.', date: '26 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat kopi', owner: 'Khiew Shi Kai', attendees: ['Izzuddin', 'Cruz']},
-//        {id: 3, title: 'Food Food Food', description: 'Grab an awesome meal together!', date: '27 November 2014', timeStart: '1230', timeEnd: '1545', venue: 'SIS GSR 2.4', penalty: 'Treat Meal', owner: 'Khiew Shi Kai', attendees: ['Izzuddin']}
-//    ];
-
     var firebaseRef = new Firebase("https://smu-pop.firebaseio.com/events");
     var sync = $firebase(firebaseRef);
     var allEventsArray = sync.$asArray();
@@ -277,6 +266,28 @@ myApp.factory('EventService', function ($firebase) {
                         var attendeeObj = eventObj.attendees[j];
                         if (attendeeObj.email == userId) {
                             attendeeObj.status = 'g';
+                        }
+                    }
+                }
+            }
+            allEventsArray.$save(eventObj);
+        },
+        updatePoints: function (eventId) {
+            console.log("update Points");
+            var eventObj = {};
+            
+            for (var i = 0; i < allEventsArray.length; i++) {
+                eventObj = allEventsArray[i];
+                // account exist
+                if (eventId === eventObj.id) {
+                    // loop through the attendees of this event
+                    for (var j = 0; j < eventObj.attendees.length; j++) {
+                        var attendeeObj = eventObj.attendees[j];
+                        if (attendeeObj.status === 'g') {
+                            attendeeObj.points += 5;
+                        }
+                        if (attendeeObj.status === 'r') {
+                            attendeeObj.points -= 5;
                         }
                     }
                 }

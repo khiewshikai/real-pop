@@ -452,23 +452,23 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
         MasterDataService.logout();
 //        window.location = '#/login';
     };
-
-    // have events, watch first event location
-    if ($scope.eventsList.length != 0) {
-        // see if user has arrived...
-        var checkLoc = function () {
-            var deferred = $q.defer();
-            console.log($scope.eventsList[0]);
-            var arrived = retrieveUserCurrentCoord($scope.eventsList[0].venueLat, $scope.eventsList[0].venueLng);
-            deferred.resolve(arrived);
-            return deferred.promise;
-        };
-
-        if (checkLoc) {
-            EventService.updateAttendance($scope.eventsList[0].id, $scope.loggedInUser.email, 'g');
+    
+    $scope.date = new Date();
+    var checkLoc = function () {
+        // have events, watch first event location
+        if ($scope.eventsList.length != 0) {
+            if ($scope.date < $scope.eventsList[0].startTime && $scope.date >= $scope.eventsList[0].startTime + 900000) {
+                var deferred = $q.defer();
+                console.log($scope.eventsList[0]);
+                var arrived = retrieveUserCurrentCoord($scope.eventsList[0].venueLat, $scope.eventsList[0].venueLng);
+                deferred.resolve(arrived);
+                return deferred.promise;
+            }
+            if ($scope.date > $scope.eventsList[0].startTime) {
+                EventService.updatePoints($scope.eventsList[0].id);
+            }
         }
-
-    }
+    };
 
     // helper class -----------------------------------
     $scope.convertTime = function (time) {
@@ -540,7 +540,7 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataSe
         var dateStr = date.toDateString();
         return dateStr;
     };
-    
+
     $scope.getPenImg = function (name) {
         return PenaltyService.getPenImg(name);
     };
