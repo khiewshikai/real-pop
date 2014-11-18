@@ -315,13 +315,14 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
                 "penaltyName": penaltyName,
                 "penaltyRules": penaltyRules
             };
-            
+
+            var currentDate = new Date();
             //cruz news
             var newsObj = {
                 "id": $scope.loggedInUser.$id + new Date().getTime(),
                 "user": $scope.loggedInUser.email,
                 "description": $scope.loggedInUser.name + " created a new event, " + $scope.model.title + " ,and the penalty is " + penaltyName + "!",
-                "timeStamp": new Date()
+                "timeStamp": currentDate
             };
             //cruz news
             NewsFeedService.addNews(newsObj);
@@ -434,36 +435,36 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
 //    $scope.currentEvent = {};
 
     /*ORIGINAL CODE
-    // get the events of this user
-    var eventsIdList = MasterDataService.getEvents();
-
-    for (var i = 0; i < eventsIdList.length; i++) {
-        var eventObj = EventService.getEvent(eventsIdList[i]);
-        console.log(eventObj);
-        // past event
-        if (eventObj.endTime < currentDate) {
-            console.log('past event');
-//            break;
-        } else {
-            console.log(currentDate);
-            console.log(eventObj.startTime - 900000);
-            
-            // see if there is an current event
-            if (currentDate >= eventObj.startTime - 900000 && currentDate < eventObj.endTime) {
-                console.log('current event');
-                $scope.currentEvent = eventObj;
-                console.log($scope.currentEvent);
-            } else {
-                $scope.eventsList.push(eventObj);
-            }
-        }
-
-    }
-    console.log($scope.currentEvent);
-    console.log($scope.eventsList);
-    // sort by date
-    $scope.eventsList.sort(compareDate);
-    */
+     // get the events of this user
+     var eventsIdList = MasterDataService.getEvents();
+     
+     for (var i = 0; i < eventsIdList.length; i++) {
+     var eventObj = EventService.getEvent(eventsIdList[i]);
+     console.log(eventObj);
+     // past event
+     if (eventObj.endTime < currentDate) {
+     console.log('past event');
+     //            break;
+     } else {
+     console.log(currentDate);
+     console.log(eventObj.startTime - 900000);
+     
+     // see if there is an current event
+     if (currentDate >= eventObj.startTime - 900000 && currentDate < eventObj.endTime) {
+     console.log('current event');
+     $scope.currentEvent = eventObj;
+     console.log($scope.currentEvent);
+     } else {
+     $scope.eventsList.push(eventObj);
+     }
+     }
+     
+     }
+     console.log($scope.currentEvent);
+     console.log($scope.eventsList);
+     // sort by date
+     $scope.eventsList.sort(compareDate);
+     */
 
     //FIX ASYNC
     var allEvents = EventService.getAllEvents();
@@ -472,7 +473,7 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
     //console.log(test[0]);
 
     // get the events of this user
-    var retrieveUserEvents = function(){
+    var retrieveUserEvents = function () {
         var retrieveList = [];
         var deferred = $q.defer();
         var eventsIdList = MasterDataService.getEvents();
@@ -489,44 +490,44 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
         deferred.resolve(eventsIdList);
         return deferred.promise;
     }
-    $timeout(function(){
-    retrieveUserEvents().then(function(data){
-        console.log(data);
-        for(var j = 0; j < data.length; j++){
-            for (var i = 0; i < allEvents.length; i++) {
-                var eventObj = allEvents[i];
-                // account exist
-                if (data[j] === eventObj.id) {
-                    //$scope.eventsList.push(eventObj);
-                    if (eventObj.endTime < currentDate) {
-                        console.log('past event');
+    $timeout(function () {
+        retrieveUserEvents().then(function (data) {
+            console.log(data);
+            for (var j = 0; j < data.length; j++) {
+                for (var i = 0; i < allEvents.length; i++) {
+                    var eventObj = allEvents[i];
+                    // account exist
+                    if (data[j] === eventObj.id) {
+                        //$scope.eventsList.push(eventObj);
+                        if (eventObj.endTime < currentDate) {
+                            console.log('past event');
 //                      break;
-                    } else {
-                        console.log(currentDate);
-                        console.log(eventObj.startTime - 900000);
-            
-                        // see if there is an current event
-                         if (currentDate >= eventObj.startTime - 900000 && currentDate < eventObj.endTime) {
-                            console.log('current event');
-                            $scope.currentEvent = eventObj;
-                            console.log($scope.currentEvent);
                         } else {
-                            $scope.eventsList.push(eventObj);
+                            console.log(currentDate);
+                            console.log(eventObj.startTime - 900000);
+
+                            // see if there is an current event
+                            if (currentDate >= eventObj.startTime - 900000 && currentDate < eventObj.endTime) {
+                                console.log('current event');
+                                $scope.currentEvent = eventObj;
+                                console.log($scope.currentEvent);
+                            } else {
+                                $scope.eventsList.push(eventObj);
+                            }
                         }
                     }
-                }
-            
-                console.log(eventObj);
-            }  
-        }
-      
-        $scope.eventsList.sort(compareDate);
-        console.log($scope.eventsList);
 
-        $ionicLoading.hide();
-        $scope.listReady = true;
-    });
-        }, 1200);
+                    console.log(eventObj);
+                }
+            }
+
+            $scope.eventsList.sort(compareDate);
+            console.log($scope.eventsList);
+
+            $ionicLoading.hide();
+            $scope.listReady = true;
+        });
+    }, 1200);
 
 
 
@@ -553,13 +554,13 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
 //        window.location = '#/login';
     };
 
-    
+
     // have events, watch first event location
-    $scope.refreshLocation = function() {
+    $scope.refreshLocation = function () {
         if ($scope.currentEvent) {
             console.log("Have current event");
             var currentDate = Date.parse(new Date());
-            
+
             var bufferTime = 0;
             // check the event time
             if (currentDate >= $scope.currentEvent.startTime - 500000 && currentDate <= $scope.currentEvent.startTime + bufferTime) {
@@ -578,30 +579,31 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
                 }
             } else if (currentDate > $scope.currentEvent.startTime + bufferTime) {
                 console.log("Late liao");
-                for (var i=0; i<$scope.currentEvent.attendees.length; i++) {
+                for (var i = 0; i < $scope.currentEvent.attendees.length; i++) {
                     var attendeeObj = $scope.currentEvent.attendees[i];
                     if (attendeeObj.status === 'n') {
                         // mark as late
                         EventService.updateAttendance($scope.currentEvent.id, attendeeObj.email, 'r');
                         var member = MasterDataService.getUser(attendeeObj.email);
                         MasterDataService.addPenalty(member);
-                        
+
+                        var currentDate = new Date();
                         var newsObj = {
                             "id": $scope.member.$id + new Date().getTime(),
                             "user": $scope.member.email,
                             "description": $scope.member.name + " is late. Minus 10 points and have to do penalty - " + $scope.currentEvent.penaltyName + "!",
-                            "timeStamp": new Date()
+                            "timeStamp": currentDate
                         };
                         //cruz news
                         NewsFeedService.addNews(newsObj);
-                        
+
                     }
                 }
             }
 
         }
     }
-    
+
     //$scope.refreshLocation();
 //    var checkLoc = function () {
 //        $scope.date = new Date();
@@ -702,7 +704,7 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataSe
         var dateStr = date.toDateString();
         return dateStr;
     };
-    
+
     $scope.getPenImg = function (name) {
         return PenaltyService.getPenImg(name);
     };
@@ -764,26 +766,32 @@ myApp.controller('locationCtrl', function ($scope, $ionicLoading) {
 
 });
 
-myApp.controller('NewFeedCtrl', function ($scope, $stateParams, MasterDataService, NewsFeedService, EventService, RankingService, PenaltyService, $ionicPopup) {
+myApp.controller('NewFeedCtrl', function ($scope, $stateParams,$timeout, MasterDataService, NewsFeedService, EventService, RankingService, PenaltyService, $ionicPopup) {
     console.log(MasterDataService.getLoggedInUser());
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
 
-    $scope.newsList = [];
-    $scope.newsList = NewsFeedService.getAllNews();
-    console.log($scope.newsList );
-    
+    $timeout(function () {
+        $scope.newsList = [];
+        $scope.newsList = NewsFeedService.getAllNews();
+        console.log($scope.newsList);
+    }, 1500);
+
     $scope.getUser = function (email) {
         return MasterDataService.getUser(email);
     };
-    
+
     $scope.getRankName = function (points) {
         return RankingService.getRank(points);
     };
-    
+
     $scope.convertTime = function (time) {
-      var date = new Date(time);
-    var dateStr = date.toLocaleTimeString();
-    return dateStr;
+        var date = new Date(time);
+        var dateStr = date.toLocaleTimeString();
+        return dateStr;
+    };
+    
+    $scope.getAvatar = function (points) {
+        return RankingService.getAvatar(points);
     };
 });
 
