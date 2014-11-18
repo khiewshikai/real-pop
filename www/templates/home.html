@@ -46,11 +46,19 @@
             </div>
 
             <!--<button class="col  button button-clear" onclick="window.location = '#/location'">Location</button>-->
+<<<<<<< Updated upstream
             <div class="item" ng-repeat="event in eventsList" type="item-text-wrap" ng-click="viewEvent('#/event/' + event.id)">
 
                 <span class="item-note arrived">
                     {{countArrived(event.attendees)}}
                 </span>
+=======
+            <div class="item" ng-repeat="event in eventsList" type="item-text-wrap" ng-click="viewEvent('#/event/'+event.id)" ng-if="listReady">
+                <span class="item-note arrived">
+                                <!--{{countArrived(event.attendees)}}-->
+                                {{countArrived()}}
+                            </span>
+>>>>>>> Stashed changes
                 <h2>{{event.title}}</h2>
 
                 <span class="item-note totalMembers">

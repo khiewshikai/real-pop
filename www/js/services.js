@@ -15,7 +15,9 @@ myApp.factory('MasterDataService', function ($firebase) {
     // methods for getting data
     return {
         allUsers: function () {
+
             return allUsersArray;
+
         },
         authenticateUser: function (email, pw) {
             for (var i = 0; i < allUsersArray.length; i++) {
@@ -225,14 +227,24 @@ myApp.factory('PenaltyService', function () {
 
 
 
-myApp.factory('EventService', function ($firebase) {
+myApp.factory('EventService', function ($firebase, $q) {
     var firebaseRef = new Firebase("https://smu-pop.firebaseio.com/events");
     var sync = $firebase(firebaseRef);
     var allEventsArray = sync.$asArray();
 
     return {
+        allEvents: allEventsArray,
+
         getAllEvents: function () {
-            return allEventsArray;
+            //var deferred = $q.defer();
+            console.log(allEventsArray);
+            allEventsArray.$loaded().then(function(allEventsArray){
+                console.log(allEventsArray);
+                return allEventsArray;
+                //deferred.resolve(allEventsArray);
+                //return deferred.promise;   
+            });
+               
         },
         getEvent: function (eventId) {
             // Simple index lookup
