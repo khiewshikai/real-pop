@@ -46,7 +46,7 @@
                 <img src="{{getAvatar(attendee.points)}}">
                 <h2 class="appRed" ng-if="attendee.email == loggedInUser.email">You</h2>
                 <h2 ng-if="attendee.email != loggedInUser.email">{{attendee.name}}</h2>
-                <h6 class="greyText">{{event.attendees[$index]}}</h6>
+                <h6 class="greyText">{{getRankName(attendee.points)}}</h6>
                 <i class="icon ion-record" ng-class="{appRed: event.attendees[$index].status === 'r', balanced: event.attendees[$index].status === 'g', neutral: event.attendees[$index].status === 'n'}"></i>
             </div>
 

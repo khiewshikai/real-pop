@@ -116,10 +116,10 @@ myApp.factory('MasterDataService', function ($firebase) {
             allUsersArray.$save(loggedInUser);
         }
         ,
-        addPenalty: function () {
-            loggedInUser.penalty = loggedInUser.penalty + 1;
-            loggedInUser.points = loggedInUser.points - 10;
-            allUsersArray.$save(loggedInUser);
+        addPenalty: function (member) {
+            member.penalty = member.penalty + 1;
+            member.points = member.points - 10;
+            allUsersArray.$save(member);
         }
     };
 });
@@ -172,7 +172,7 @@ myApp.factory('RankingService', function () {
 });
 
 myApp.factory('PenaltyService', function () {
-    var penaltyList = ['treat', 'pay up', 'perform', 'GSR booker', 'custom'];
+    var penaltyList = ['food and drink (treat)', 'pay up', 'perform', 'GSR booker', 'custom'];
 
     return {
         getPenaltyList: function () {
@@ -181,20 +181,20 @@ myApp.factory('PenaltyService', function () {
         getDesc: function (name) {
             var desc = "";
             switch (name) {
-                case 'treat':
-                    desc = "this is treat desc";
+                case 'food and drink (treat)':
+                    desc = "For coming late for this meeting, you are to treat your teammates to either a drink or meal. That’s right. A drink or meal for every single one of them. *wink*";
                     break;
                 case 'pay up':
-                    desc = "this is pay up desc";
+                    desc = "Got a welfare fund for your group? Nope? Well time to start one then. For coming late, contribute to this fund. $2, $5, or more. Let’s see what your groupmates decide on.";
                     break;
                 case 'perform':
-                    desc = "this is perform desc";
+                    desc = "Time for some entertainment for your groupmates. Hope you had enough practice in your bathroom because it is time to sing or dance to the latest hit. Groupmates, I am sure you know which song to choose.";
                     break;
                 case 'GSR booker':
-                    desc = "this is GSR booker desc";
+                    desc = "Bet you are going to have many more meetings with this group. As a penalty for being late, you now have to be the one responsible for all future GSR bookings for this group. You heard me right, so start booking those GSRs!";
                     break;
                 default:
-                    desc = "";
+                    desc = "Good job deciding on that penalty. Set your own rules on how is should be carried out and remember to impose it on your group member!";
                     break;
             }
             return desc;
@@ -202,7 +202,7 @@ myApp.factory('PenaltyService', function () {
         getPenImg: function (name) {
             var url = "";
             switch (name) {
-                case 'treat':
+                case 'food and drink (treat)':
                     url = "img/treat penalty-02-01.png";
                     break;
                 case 'pay up':

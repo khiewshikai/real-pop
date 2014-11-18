@@ -516,7 +516,7 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
         $ionicLoading.hide();
         $scope.listReady = true;
     });
-        }, 2000);
+        }, 1200);
 
 
 
@@ -567,12 +567,14 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
                     MasterDataService.addPunctual();
                 }
             } else if (currentDate > $scope.currentEvent.startTime + bufferTime) {
+                console.log("Late liao");
                 for (var i=0; i<$scope.currentEvent.attendees.length; i++) {
                     var attendeeObj = $scope.currentEvent.attendees[i];
-                    if (attendeeObj.email == $scope.loggedInUser.email && attendeeObj.status === 'n') {
+                    if (attendeeObj.status === 'n') {
                         // mark as late
-                        EventService.updateAttendance($scope.currentEvent.id, $scope.loggedInUser.email, 'r');
-                        MasterDataService.addPenalty();
+                        EventService.updateAttendance($scope.currentEvent.id, attendeeObj.email, 'r');
+                        var member = MasterDataService.getUser(attendeeObj.email);
+                        MasterDataService.addPenalty(member);
                     }
                 }
             }

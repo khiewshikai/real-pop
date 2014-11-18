@@ -21,7 +21,7 @@
         <div class="list" ng-if="currentEvent">
             <div class="item item-divider item-button-right">
                 Current Event
-                <button class="button button-icon icon ion-refresh" ng-click="refreshLocation()"></button>
+                <button class="button button-icon icon ion-refresh refreshBtn" ng-click="refreshLocation()"></button>
 
             </div>
             <div class="item" type="item-text-wrap" ng-click="viewEvent('#/event/' + currentEvent.id)">
@@ -40,7 +40,7 @@
         </div>
 
         <!--upcoming event-->
-        <div class="list">
+        <div class="list" ng-if="eventsList.length > 0">
             <div class="item item-divider">
                 Upcoming Events
             </div>

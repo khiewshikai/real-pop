@@ -160,6 +160,7 @@ ion-content {
 
 .btnHeight {
     height: 60px;
+    margin-top: -10px;
 }
 
 .addMemberList {
@@ -373,7 +374,9 @@ ion-content {
 
 /* Event details */
 .penaltyImg {
-    margin-top: -2px;
+    margin-top: -8px;
+    margin-right: -10px;
+    margin-left: -10px;
 }
 
 .marginTop {
@@ -394,4 +397,9 @@ ion-content {
 
 .neutral {
     color: #CCD1D9;
+}
+
+.refreshBtn {
+    margin-top: -10px;
+    margin-right: -10px;
 }
