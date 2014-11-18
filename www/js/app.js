@@ -62,6 +62,13 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: 'templates/ranking.html',
                 controller: 'RankingCtrl'
             })
+            
+            .state('newsfeed', {
+                url: '/newsfeed',
+                templateUrl: 'templates/newsfeed.html',
+                controller: 'NewFeedCtrl'
+            })
+            
             .state('livelab', {
                 url: '/livelab',
                 templateUrl: 'templates/liveLabLogin.html',

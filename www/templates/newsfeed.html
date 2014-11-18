@@ -1,0 +1,23 @@
+<ion-view class="blackbg">
+
+    <div class="bar bar-header navbar-color topRounded">
+        <button class="button button-icon icon ion-clipboard white" onclick="window.location = '#/newsfeed'"></button>
+        <h1 class="title white" onclick="window.location = '#/home'"><img class="appLogo" src="img/PoP.png"></h1>
+        <button class="button button-icon icon ion-ios7-person white" onclick="window.location = '#/ranking'"></button>
+    </div>
+    <ion-content padding="true" class="contentContainer">
+        
+        <div class="newsFeedCard" ng-repeat="news in newsList">
+            <img class="nfAvartar" src="img/Forever-Late.png">
+            <div class="newsFeedDetails">
+                <div class="nfName">{{getUser(news.user).name}}</div>
+                <p class="greyText">{{getRankName(getUser(news.user).points)}} <br/>{{convertTime(news.timeStamp)}}</p>
+            </div>
+            <div class="nfDesc">
+                {{news.description}};
+            </div>
+        </div>
+
+    </ion-content>
+
+</ion-view>

@@ -403,3 +403,41 @@ ion-content {
     margin-top: -10px;
     margin-right: -10px;
 }
+
+.nfAvartar {
+    width: 75px;
+    max-width: 20%;
+    display: inline-block;
+    float: left;
+}
+
+.newsFeedDetails {
+    width: 75%;
+    display: inline-block;
+    float: left;
+    margin-left: 15px;
+}
+
+.nfDesc {
+    width: 100%;
+    margin-top: 5px;
+    float: left;
+}
+
+.newsFeedCard {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px 10px;
+}
+
+.nfName {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.appLogo {
+    margin-top: 5px;
+}

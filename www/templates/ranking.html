@@ -1,13 +1,13 @@
 <ion-view class="blackbg">
 
     <div class="bar bar-header navbar-color topRounded">
-        <button class="button button-icon icon ion-clipboard white"></button>
-        <h1 class="title white" onclick="window.location = '#/home'">PoP</h1>
-        <button class="button button-icon icon ion-ios7-person white"></button>
+        <button class="button button-icon icon ion-clipboard white" onclick="window.location = '#/newsfeed'"></button>
+        <h1 class="title white" onclick="window.location = '#/home'"><img class="appLogo" src="img/PoP.png"></h1>
+        <button class="button button-icon icon ion-ios7-person white" onclick="window.location = '#/ranking'"></button>
     </div>
     <ion-content class="contentContainer">
         <div class="profilePanel">
-            <div class="profileAvatar"><img src='img/Supreme Punctual Rajesh.png' alt=""/></div>
+            <div class="profileAvatar"><img src='{{getAvatar(loggedInUser.points)}}' alt=""/></div>
             <div class="profileDetails">
                 <div class="profileName">{{loggedInUser.name}}</div>
                 <div class="profileRank">{{getRankName(loggedInUser.points)}}</div>

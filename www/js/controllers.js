@@ -162,7 +162,7 @@ myApp.controller("AddFriendCtrl", function ($scope, MasterDataService, $cordovaT
     };
 });
 
-myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventService, RankingService, $ionicModal, $cordovaToast, PenaltyService, $http) {
+myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventService, RankingService, NewsFeedService, $ionicModal, $cordovaToast, PenaltyService, $http) {
     // initialise a model object to bind input form
     $scope.model = {};
 
@@ -315,6 +315,16 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
                 "penaltyName": penaltyName,
                 "penaltyRules": penaltyRules
             };
+            
+            //cruz news
+            var newsObj = {
+                "id": $scope.loggedInUser.$id + new Date().getTime(),
+                "user": $scope.loggedInUser.email,
+                "description": $scope.loggedInUser.name + " created a new event, " + $scope.model.title + " ,and the penalty is " + penaltyName + "!",
+                "timeStamp": new Date()
+            };
+            //cruz news
+            NewsFeedService.addNews(newsObj);
 
             // add event to all members
             for (var i = 0; i < $scope.addedMembersList.length; i++) {
@@ -412,7 +422,7 @@ myApp.controller("RankingCtrl", function ($scope, MasterDataService, RankingServ
 });
 
 
-myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, $q, $timeout, $ionicLoading) {
+myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, NewsFeedService, $q, $timeout, $ionicLoading) {
     console.log(MasterDataService.getLoggedInUser());
 
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
@@ -575,6 +585,16 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
                         EventService.updateAttendance($scope.currentEvent.id, attendeeObj.email, 'r');
                         var member = MasterDataService.getUser(attendeeObj.email);
                         MasterDataService.addPenalty(member);
+                        
+                        var newsObj = {
+                            "id": $scope.member.$id + new Date().getTime(),
+                            "user": $scope.member.email,
+                            "description": $scope.member.name + " is late. Minus 10 points and have to do penalty - " + $scope.currentEvent.penaltyName + "!",
+                            "timeStamp": new Date()
+                        };
+                        //cruz news
+                        NewsFeedService.addNews(newsObj);
+                        
                     }
                 }
             }
@@ -742,6 +762,29 @@ myApp.controller('locationCtrl', function ($scope, $ionicLoading) {
 
     };
 
+});
+
+myApp.controller('NewFeedCtrl', function ($scope, $stateParams, MasterDataService, NewsFeedService, EventService, RankingService, PenaltyService, $ionicPopup) {
+    console.log(MasterDataService.getLoggedInUser());
+    $scope.loggedInUser = MasterDataService.getLoggedInUser();
+
+    $scope.newsList = [];
+    $scope.newsList = NewsFeedService.getAllNews();
+    console.log($scope.newsList );
+    
+    $scope.getUser = function (email) {
+        return MasterDataService.getUser(email);
+    };
+    
+    $scope.getRankName = function (points) {
+        return RankingService.getRank(points);
+    };
+    
+    $scope.convertTime = function (time) {
+      var date = new Date(time);
+    var dateStr = date.toLocaleTimeString();
+    return dateStr;
+    };
 });
 
 

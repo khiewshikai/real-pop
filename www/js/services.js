@@ -333,3 +333,29 @@ myApp.factory('ProfileService', function () {
         }
     };
 });
+
+myApp.factory('NewsFeedService', function ($firebase) {
+    var firebaseRef = new Firebase("https://smu-pop.firebaseio.com/newsfeed");
+    var sync = $firebase(firebaseRef);
+    var allNewsArray = sync.$asArray();
+
+    return {
+        getAllNews: function () {
+            return allNewsArray;
+        },
+        getNews: function (newsId) {
+            // Simple index lookup
+            for (var i = 0; i < allNewsArray.length; i++) {
+                var newsObj = allNewsArray[i];
+                // account exist
+                if (newsId === newsObj.id) {
+                    return newsObj;
+                }
+            }
+            return {};
+        },
+        addNews: function (newsObj) {
+            sync.$push(newsObj);
+        }
+    };
+});
