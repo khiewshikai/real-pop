@@ -412,7 +412,7 @@ myApp.controller("RankingCtrl", function ($scope, MasterDataService, RankingServ
 });
 
 
-myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, $q) {
+myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, $q, $timeout, $ionicLoading) {
     console.log(MasterDataService.getLoggedInUser());
 
     $scope.loggedInUser = MasterDataService.getLoggedInUser();
@@ -423,9 +423,10 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
     var bufferTime = 900000;
 //    $scope.currentEvent = {};
 
+    /*ORIGINAL CODE
     // get the events of this user
     var eventsIdList = MasterDataService.getEvents();
-    
+
     for (var i = 0; i < eventsIdList.length; i++) {
         var eventObj = EventService.getEvent(eventsIdList[i]);
         console.log(eventObj);
@@ -452,6 +453,71 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
     console.log($scope.eventsList);
     // sort by date
     $scope.eventsList.sort(compareDate);
+    */
+
+    //FIX ASYNC
+    var allEvents = EventService.getAllEvents();
+    console.log(allEvents);
+    //var test = EventService.allEvents;
+    //console.log(test[0]);
+
+    // get the events of this user
+    var retrieveUserEvents = function(){
+        var retrieveList = [];
+        var deferred = $q.defer();
+        var eventsIdList = MasterDataService.getEvents();
+        for (var i = 0; i < eventsIdList.length; i++) {
+            var eventObj = EventService.getEvent(eventsIdList[i]);
+            retrieveList.push(eventObj);
+
+        }
+        console.log(eventsIdList);
+        $ionicLoading.show({
+            template: 'Loading...'
+        });
+        $scope.listReady = false;
+        deferred.resolve(eventsIdList);
+        return deferred.promise;
+    }
+    $timeout(function(){
+    retrieveUserEvents().then(function(data){
+        console.log(data);
+        for(var j = 0; j < data.length; j++){
+            for (var i = 0; i < allEvents.length; i++) {
+                var eventObj = allEvents[i];
+                // account exist
+                if (data[j] === eventObj.id) {
+                    //$scope.eventsList.push(eventObj);
+                    if (eventObj.endTime < currentDate) {
+                        console.log('past event');
+//                      break;
+                    } else {
+                        console.log(currentDate);
+                        console.log(eventObj.startTime - 900000);
+            
+                        // see if there is an current event
+                         if (currentDate >= eventObj.startTime - 900000 && currentDate < eventObj.endTime) {
+                            console.log('current event');
+                            $scope.currentEvent = eventObj;
+                            console.log($scope.currentEvent);
+                        } else {
+                            $scope.eventsList.push(eventObj);
+                        }
+                    }
+                }
+            
+                console.log(eventObj);
+            }  
+        }
+      
+        $scope.eventsList.sort(compareDate);
+        console.log($scope.eventsList);
+
+        $ionicLoading.hide();
+        $scope.listReady = true;
+    });
+        }, 2000);
+
 
 
     // count the number of attendees who arrived
