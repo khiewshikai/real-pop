@@ -277,7 +277,7 @@ myApp.controller("AddEventCtrl", function ($scope, MasterDataService, EventServi
         for (var i = 0; i < $scope.addedMembersList.length; i++) {
             var mObj = {
                 "email": $scope.addedMembersList[i].email,
-                "status": "r"
+                "status": "n"
             }
             attendeesList.push(mObj);
         }
@@ -419,12 +419,36 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
 
     $scope.eventsList = [];
 
+    var currentDate = Date.parse(new Date());
+    var bufferTime = 900000;
+//    $scope.currentEvent = {};
+
     // get the events of this user
     var eventsIdList = MasterDataService.getEvents();
+    
     for (var i = 0; i < eventsIdList.length; i++) {
         var eventObj = EventService.getEvent(eventsIdList[i]);
-        $scope.eventsList.push(eventObj);
+        console.log(eventObj);
+        // past event
+        if (eventObj.endTime < currentDate) {
+            console.log('past event');
+//            break;
+        } else {
+            console.log(currentDate);
+            console.log(eventObj.startTime - 900000);
+            
+            // see if there is an current event
+            if (currentDate >= eventObj.startTime - 900000 && currentDate < eventObj.endTime) {
+                console.log('current event');
+                $scope.currentEvent = eventObj;
+                console.log($scope.currentEvent);
+            } else {
+                $scope.eventsList.push(eventObj);
+            }
+        }
+
     }
+    console.log($scope.currentEvent);
     console.log($scope.eventsList);
     // sort by date
     $scope.eventsList.sort(compareDate);
@@ -452,23 +476,60 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
         MasterDataService.logout();
 //        window.location = '#/login';
     };
+
     
-    $scope.date = new Date();
-    var checkLoc = function () {
-        // have events, watch first event location
-        if ($scope.eventsList.length != 0) {
-            if ($scope.date < $scope.eventsList[0].startTime && $scope.date >= $scope.eventsList[0].startTime + 900000) {
-                var deferred = $q.defer();
-                console.log($scope.eventsList[0]);
-                var arrived = retrieveUserCurrentCoord($scope.eventsList[0].venueLat, $scope.eventsList[0].venueLng);
-                deferred.resolve(arrived);
-                return deferred.promise;
+    // have events, watch first event location
+    $scope.refreshLocation = function() {
+        if ($scope.currentEvent) {
+            console.log("Have current event");
+            var currentDate = Date.parse(new Date());
+            
+            var bufferTime = 900000;
+            // check the event time
+            if (currentDate >= $scope.currentEvent.startTime - bufferTime && currentDate <= $scope.currentEvent.startTime + bufferTime) {
+                // see if user has arrived...
+                var checkLoc = function () {
+                    var deferred = $q.defer();
+                    console.log($scope.currentEvent);
+                    var arrived = retrieveUserCurrentCoord($scope.currentEvent.venueLat, $scope.currentEvent.venueLng);
+                    deferred.resolve(arrived);
+                    return deferred.promise;
+                };
+
+                if (checkLoc) {
+                    EventService.updateAttendance($scope.currentEvent.id, $scope.loggedInUser.email, 'g');
+                }
+            } else if (currentDate > $scope.currentEvent.startTime + bufferTime) {
+                for (var i=0; i<$scope.currentEvent.attendees.length; i++) {
+                    var attendeeObj = $scope.currentEvent.attendees[i];
+                    if (attendeeObj.email == $scope.loggedInUser.email && attendeeObj.status === 'n') {
+                        // mark as late
+                        EventService.updateAttendance($scope.currentEvent.id, $scope.loggedInUser.email, 'r');
+                    }
+                }
             }
-            if ($scope.date > $scope.eventsList[0].startTime) {
-                EventService.updatePoints($scope.eventsList[0].id);
-            }
+
         }
-    };
+    }
+    
+    //$scope.refreshLocation();
+//    var checkLoc = function () {
+//        $scope.date = new Date();
+//        // have events, watch first event location
+//        if ($scope.eventsList.length != 0) {
+//            if ($scope.date < $scope.eventsList[0].startTime && $scope.date >= $scope.eventsList[0].startTime + 900000) {
+//                var deferred = $q.defer();
+//                console.log($scope.eventsList[0]);
+//                var arrived = retrieveUserCurrentCoord($scope.eventsList[0].venueLat, $scope.eventsList[0].venueLng);
+//                deferred.resolve(arrived);
+//                return deferred.promise;
+//            }
+//            if($scope.date > $scope.eventsList[0].startTime){
+//                //EventService.updatePoints($scope.eventsList[0].id);
+//                EventService.updateAttendance($scope.eventsList[0].id, $scope.loggedInUser.email, 'g');
+//            }
+//        }
+//    };
 
     // helper class -----------------------------------
     $scope.convertTime = function (time) {
@@ -500,6 +561,17 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataSe
         $scope.attendeesList.push(attendeeObj);
     }
 
+    // count the number of attendees who arrived
+    $scope.countArrived = function () {
+        var count = 0;
+        for (var i = 0; i < $scope.event.attendees.length; i++) {
+            var attendeeObj = $scope.event.attendees[i];
+            if (attendeeObj.status == 'g') {
+                count += 1;
+            }
+        }
+        return count;
+    };
 
     // A confirm dialog
     $scope.showConfirm = function (event) {
@@ -540,7 +612,7 @@ myApp.controller('EventDetailCtrl', function ($scope, $stateParams, MasterDataSe
         var dateStr = date.toDateString();
         return dateStr;
     };
-
+    
     $scope.getPenImg = function (name) {
         return PenaltyService.getPenImg(name);
     };

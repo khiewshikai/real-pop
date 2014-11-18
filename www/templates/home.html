@@ -11,30 +11,57 @@
         <h1 class="title white" ng-click="logout()">PoP</h1>
         <button class="button button-icon icon ion-ios7-person white" onclick="window.location = '#/ranking'"></button>
     </div>
-    <ion-content class="contentContainer">
+    <ion-content padding="true" class="contentContainer">
+        <div class="row btnHeight">
+            <button class="col button button-clear" onclick="window.location = '#/addevent'">Add Event</button>
+            <button class="col  button button-clear" onclick="window.location = '#/addfriend'">Add Friend</button>
+        </div>
 
-        <ion-list>
+        <!--current event-->
+        <div class="list" ng-if="currentEvent">
+            <div class="item item-divider item-button-right">
+                Current Event
+                <button class="button button-icon icon ion-refresh" ng-click="refreshLocation()"></button>
 
-            <div class="row btnHeight">
-                <button class="col button button-clear" onclick="window.location = '#/addevent'">Add Event</button>
-                <button class="col  button button-clear" onclick="window.location = '#/addfriend'">Add Friend</button>
             </div>
-            <!--<button class="col  button button-clear" onclick="window.location = '#/location'">Location</button>-->
-            <div class="item" ng-repeat="event in eventsList" type="item-text-wrap" ng-click="viewEvent('#/event/'+event.id)">
+            <div class="item" type="item-text-wrap" ng-click="viewEvent('#/event/' + currentEvent.id)">
+
                 <span class="item-note arrived">
-                               {{countArrived(event.attendees)}}
-                            </span>
-                <h2>{{event.title}}</h2>
-                
+                    {{countArrived(currentEvent.attendees)}}
+                </span>
+                <h2>{{currentEvent.title}}</h2>
+
                 <span class="item-note totalMembers">
-                                {{event.attendees.length}}
-                            </span>
+                    {{currentEvent.attendees.length}}
+                </span>
+                <div><p>{{currentEvent.venue}}</p></div>
+                <div><p>{{convertDate(currentEvent.startTime)}}, {{convertTime(currentEvent.startTime)}} - {{convertTime(currentEvent.endTime)}}</p></div>                
+            </div>
+        </div>
+
+        <!--upcoming event-->
+        <div class="list">
+            <div class="item item-divider">
+                Upcoming Events
+            </div>
+
+            <!--<button class="col  button button-clear" onclick="window.location = '#/location'">Location</button>-->
+            <div class="item" ng-repeat="event in eventsList" type="item-text-wrap" ng-click="viewEvent('#/event/' + event.id)">
+
+                <span class="item-note arrived">
+                    {{countArrived(event.attendees)}}
+                </span>
+                <h2>{{event.title}}</h2>
+
+                <span class="item-note totalMembers">
+                    {{event.attendees.length}}
+                </span>
                 <div><p>{{event.venue}}</p></div>
                 <div><p>{{convertDate(event.startTime)}}, {{convertTime(event.startTime)}} - {{convertTime(event.endTime)}}</p></div>
-                
+
             </div>
 
-        </ion-list>
+        </div>
 
     </ion-content>
 </ion-view>

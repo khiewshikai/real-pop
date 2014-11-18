@@ -86,18 +86,21 @@ myApp.factory('MasterDataService', function ($firebase) {
             return [];
         },
         getEvents: function () {
+            console.log(loggedInUser.events);
             if (loggedInUser.events) {
                 return loggedInUser.events;
             }
             return [];
         },
         addEvent: function (member, event) {
+            console.log(member);
             if (member.events) {
                 member.events.push(event);
             } else {
                 member.events = [event];
             }
             allUsersArray.$save(member);
+            console.log("Saved");
         },
         removeEvent: function (event) {
             for (var i = 0; i < loggedInUser.events.length; i++) {
@@ -265,7 +268,8 @@ myApp.factory('EventService', function ($firebase) {
                     for (var j = 0; j < eventObj.attendees.length; j++) {
                         var attendeeObj = eventObj.attendees[j];
                         if (attendeeObj.email == userId) {
-                            attendeeObj.status = 'g';
+                            attendeeObj.status = status;
+                            break;
                         }
                     }
                 }
