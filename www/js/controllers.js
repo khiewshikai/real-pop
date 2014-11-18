@@ -603,6 +603,8 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
 
         }
     }
+    
+    $scope.refreshLocation();
 
     //$scope.refreshLocation();
 //    var checkLoc = function () {
