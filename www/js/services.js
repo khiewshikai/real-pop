@@ -109,6 +109,17 @@ myApp.factory('MasterDataService', function ($firebase) {
                 }
             }
             allUsersArray.$save(loggedInUser);
+        },
+        addPunctual: function () {
+            loggedInUser.punctual = loggedInUser.punctual + 1;
+            loggedInUser.points = loggedInUser.points + 5;
+            allUsersArray.$save(loggedInUser);
+        }
+        ,
+        addPenalty: function () {
+            loggedInUser.penalty = loggedInUser.penalty + 1;
+            loggedInUser.points = loggedInUser.points - 10;
+            allUsersArray.$save(loggedInUser);
         }
     };
 });

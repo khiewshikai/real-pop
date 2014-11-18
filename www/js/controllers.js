@@ -484,9 +484,9 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
             console.log("Have current event");
             var currentDate = Date.parse(new Date());
             
-            var bufferTime = 900000;
+            var bufferTime = 0;
             // check the event time
-            if (currentDate >= $scope.currentEvent.startTime - bufferTime && currentDate <= $scope.currentEvent.startTime + bufferTime) {
+            if (currentDate >= $scope.currentEvent.startTime - 500000 && currentDate <= $scope.currentEvent.startTime + bufferTime) {
                 // see if user has arrived...
                 var checkLoc = function () {
                     var deferred = $q.defer();
@@ -498,6 +498,7 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
 
                 if (checkLoc) {
                     EventService.updateAttendance($scope.currentEvent.id, $scope.loggedInUser.email, 'g');
+                    MasterDataService.addPunctual();
                 }
             } else if (currentDate > $scope.currentEvent.startTime + bufferTime) {
                 for (var i=0; i<$scope.currentEvent.attendees.length; i++) {
@@ -505,6 +506,7 @@ myApp.controller('HomeCtrl', function ($scope, EventService, MasterDataService, 
                     if (attendeeObj.email == $scope.loggedInUser.email && attendeeObj.status === 'n') {
                         // mark as late
                         EventService.updateAttendance($scope.currentEvent.id, $scope.loggedInUser.email, 'r');
+                        MasterDataService.addPenalty();
                     }
                 }
             }
