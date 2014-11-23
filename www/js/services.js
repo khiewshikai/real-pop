@@ -5,7 +5,7 @@ myApp.factory('MasterDataService', function ($firebase) {
     var sync = $firebase(firebaseRef);
     var allUsersArray = sync.$asArray();
 
-    console.log("Master Data loaded");
+//    console.log("Master Data loaded");
     // store the user logged in
     var loggedInUser = JSON.parse(window.localStorage['userSession'] || '{}');
 
@@ -23,7 +23,7 @@ myApp.factory('MasterDataService', function ($firebase) {
 
                 if (email === userObj.email) {
                     if (pw === userObj.password) {
-                        console.log("success");
+//                        console.log("success");
                         loggedInUser = userObj;
                         window.localStorage['userSession'] = JSON.stringify(loggedInUser);
                         return true;
@@ -31,13 +31,13 @@ myApp.factory('MasterDataService', function ($firebase) {
                 }
 
             }
-            console.log("login failed");
+//            console.log("login failed");
             return false;
         },
         logout: function () {
             window.localStorage['userSession'] = '{}';
             loggedInUser = {};
-            console.log("log out");
+//            console.log("log out");
             window.location = '#/login';
         },
         getLoggedInUser: function () {
@@ -69,9 +69,9 @@ myApp.factory('MasterDataService', function ($firebase) {
             createNewUserSuccess = "";
         },
         addFriend: function (user, email) {
-            console.log(email);
-            console.log(user.$id);
-            console.log(allUsersArray.indexOf(user));
+//            console.log(email);
+//            console.log(user.$id);
+//            console.log(allUsersArray.indexOf(user));
             if (user.friends) {
                 user.friends.push(email);
             } else {
@@ -86,21 +86,21 @@ myApp.factory('MasterDataService', function ($firebase) {
             return [];
         },
         getEvents: function () {
-            console.log(loggedInUser.events);
+//            console.log(loggedInUser.events);
             if (loggedInUser.events) {
                 return loggedInUser.events;
             }
             return [];
         },
         addEvent: function (member, event) {
-            console.log(member);
+//            console.log(member);
             if (member.events) {
                 member.events.push(event);
             } else {
                 member.events = [event];
             }
             allUsersArray.$save(member);
-            console.log("Saved");
+//            console.log("Saved");
         },
         removeEvent: function (event) {
             for (var i = 0; i < loggedInUser.events.length; i++) {
@@ -223,8 +223,6 @@ myApp.factory('PenaltyService', function () {
     };
 });
 
-
-
 myApp.factory('EventService', function ($firebase) {
     var firebaseRef = new Firebase("https://smu-pop.firebaseio.com/events");
     var sync = $firebase(firebaseRef);
@@ -259,7 +257,7 @@ myApp.factory('EventService', function ($firebase) {
                     for (var j = 0; j < eventObj.attendees.length; j++) {
                         var attendeeObj = eventObj.attendees[j];
                         if (attendeeObj.email == userId) {
-                            console.log("remove attendee");
+//                            console.log("remove attendee");
                             eventObj.attendees.splice(j, 1);
                         }
                     }
@@ -268,7 +266,7 @@ myApp.factory('EventService', function ($firebase) {
             allEventsArray.$save(eventObj);
         },
         updateAttendance: function (eventId, userId, status) {
-            console.log("update status");
+//            console.log("update status");
             var eventObj = {};
 
             for (var i = 0; i < allEventsArray.length; i++) {
@@ -288,7 +286,7 @@ myApp.factory('EventService', function ($firebase) {
             allEventsArray.$save(eventObj);
         },
         updatePoints: function (eventId) {
-            console.log("update Points");
+//            console.log("update Points");
             var eventObj = {};
             
             for (var i = 0; i < allEventsArray.length; i++) {
@@ -308,28 +306,6 @@ myApp.factory('EventService', function ($firebase) {
                 }
             }
             allEventsArray.$save(eventObj);
-        }
-    };
-});
-
-myApp.factory('ProfileService', function () {
-    // Might use a resource here that returns a JSON array
-
-    // Some fake testing data
-    var profiles = [
-        {id: 0, title: 'Cruz', description: 'Punctual King'},
-        {id: 1, title: 'Brindha', description: 'Let it go!'},
-        {id: 2, title: 'Shi Kai', description: 'Silent is gold'},
-        {id: 3, title: 'Izzuddin', description: 'Love is so fluffy'}
-    ];
-
-    return {
-        all: function () {
-            return profiles;
-        },
-        get: function (profileId) {
-            // Simple index lookup
-            return profiles[profileId];
         }
     };
 });

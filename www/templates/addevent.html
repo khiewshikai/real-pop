@@ -5,26 +5,17 @@
         <button class="button button-icon icon ion-checkmark white" ng-click="addEvent()"></button>
     </div>
     <ion-content padding="true" class="contentContainer">
-
-        <!--        <input type="text" pick-a-date="date" placeholder="Select Date" />
-                <input type="text" pick-a-time="time" placeholder="Select Time" />-->
-        
-        
+     
+        <!--form fields-->
         <div class="list">
             <div class="item item-divider">
                 Details
             </div>
             <label class="item item-input">
-                <!--<span class="input-label">Title</span>-->
                 <input name='title' type="text" placeholder="Title" ng-model="model.title">
             </label>
             <label class="item item-input">
-                <!--<span class="input-label">Venue</span>-->
-                <!--<ion-google-place placeholder="Venue" ng-model="model.venue" />-->
-                <!--<input name='venue' type="text" placeholder="Venue" ng-model="model.venue">-->
-                <!--<input type="text" id="autocomplete" class="form-control" ng-autocomplete ng-model="model.venue" />-->
                 <input type="text" placeholder="Venue" ng-model="model.venue" googleplace="" class="ng-pristine ng-valid" autocomplete="on"> 
-                <!--<i class="icon ion-close-circled appRed" ng-if="!(model.venue)"></i>-->
             </label>
 
             <label class="item item-input item-floating-label">
@@ -65,7 +56,8 @@
             </label>
 
         </div>
-
+        
+        <!--attendees-->
         <div class="list">
             <div class="item item-divider">
                 Who is going?
@@ -85,6 +77,7 @@
             <i class="icon ion-person-add"></i> Add Members
         </button>
 
+        <!--attendees pop up-->
         <script id="add-members.html" type="text/ng-template">
             <div class="modal">
               <header class="bar bar-header bar-positive topRounded">

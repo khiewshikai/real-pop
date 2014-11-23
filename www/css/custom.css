@@ -257,6 +257,7 @@ ion-content {
 .rankingList {
     width: 100%;
     margin-top: 15px;
+    padding-bottom: 30px;
     padding-top: 80px;
 }
 
